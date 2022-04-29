@@ -1498,52 +1498,53 @@ void zanri_otsimine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus){
 }
 
 void laenutamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
-    char vastus[100];
-    char a[500];
-    char b[10];
-    char c[500];
-    int raamat_id;
-    char *hx = "\0";
-	int k = 0;
-    while (k == 0) {
+    char vastus[100];//massiiv vastuse hoidmiseks
+    char a[500]; //massiiv andmebaasiga suhtlemiseks
+    char b[10]; //massiiv raamatu id hoidmiseks
+    char c[500]; //massiiv andmebaasiga suhtlemiseks
+    int raamat_id; //raamatu id hoidmiseks
+    char *hx = "\0"; //muutuja ülakoma eemaldamiseks
+	int k = 0; //muutuja k on võrdne nulliga
+    while (k == 0) { //kuni k on null ole loopis
 
-    printf("Sisestage raamatu nimi mida tahate laenutada:\n");
-    if (fgets(vastus, sizeof vastus, stdin)) {
-        char* newline = strchr(vastus, '\n');
+    printf("Sisestage raamatu nimi mida tahate laenutada:\n");//prindi ekraanile tekst
+    if (fgets(vastus, sizeof vastus, stdin)) {//võta sisse kasutaja sisestatud tekst
+        char* newline = strchr(vastus, '\n');//otsib sisestuse läbi ning vaatab, kas selles on reavahetus 
         if (newline) {
-            *newline = 0;
+            *newline = 0 //kui oli reavahetus, siis kustutab selle
         }
     }
     int ix, jx, len;
-    len = strlen(vastus);
-    for (ix = 0; ix < len; ix++)
+    len = strlen(vastus); //saame sisestatud teksti pikkuse
+    for (ix = 0; ix < len; ix++) // loop mis käib kuni ix on väiksem sisestatud teksti pikkusest
     {
-        if (vastus[ix] == '\'')
+        if (vastus[ix] == '\'')//kontroll kas karakter on \
         {
-            vastus[ix] = *hx;
-            for (jx = ix; jx < len; jx++)
+            vastus[ix] = *hx; //karakter võrdub nüüd \0
+            for (jx = ix; jx < len; jx++)//uus loop, mis vähendab vastuse pikkust
             {
-                vastus[jx] = vastus[jx + 1];
+                vastus[jx] = vastus[jx + 1]; //kogu tekst liigub ühe karakteri võrra tagasi
             }
-            len--;
-            ix--;
+            len--;//vähenda vastuse pikkust
+            ix--;//vähenda ix pikkust (mõjutab kontrollloopi while)
         }
     }
+    //lisab kokku MySQLi käsu ja kasutaja sisestatud vastuse
     sprintf(a, "SELECT raamatud.id, raamatud.nimi, autorid.nimi FROM raamatud JOIN raamatud_has_autorid ON raamatud.id = raamatud_has_autorid.raamatud_id JOIN autorid ON autorid.id = raamatud_has_autorid.autorid_id WHERE raamatud.nimi like '%%%s%%'", vastus);
-    if (mysql_query(con, a)) {
-        fprintf(stderr, "%s\n", mysql_error(con));
+    if (mysql_query(con, a)) {//saadab käsu serverile
+        fprintf(stderr, "%s\n", mysql_error(con));//kui tekib viga, lahkub programmist
         exit(1);
     }
-    res = mysql_use_result(con);
-    printf("Leitud vasted: \n");
-    while ((row = mysql_fetch_row(res)) != NULL) {
-        printf("%s %s --- %s\n", row[0], row[1], row[2]);
+    res = mysql_use_result(con);//salvestab saadud tulemuse res-i
+    printf("Leitud vasted: \n");//prindi ekraanile
+    while ((row = mysql_fetch_row(res)) != NULL) {//loop seni kaua kuni andmebaasist saadud vastel on ridu
+        printf("%s %s --- %s\n", row[0], row[1], row[2]);//prindi tulemused
     }
-    if(res == NULL){
-        printf("Vasted puuduvad\n");
-        laenutamine(con, res, row, tegevus);
+    if(res == NULL){//kui saadud tulemuse ridade arv andmebaasis on NULL
+        printf("Vasted puuduvad\n");//prindi tekst
+        laenutamine(con, res, row, tegevus);//mine tagasi laenutamise alamprogrammi algusesse
     }
-    mysql_free_result(res);
+    mysql_free_result(res);//vabasta varem salvestatud tulemus
     printf("Sisestage raamatu, mida soovite laenutada, id: \n");
     if (fgets(b, sizeof b, stdin)) {
         char* newline = strchr(b, '\n');
@@ -1685,22 +1686,22 @@ void laenutamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
         fprintf(stderr, "%s\n", mysql_error(con));
         exit(1);
     }
-	char m[100];
-    printf("Kas soovite laenutada veel ühe raamatu?\n");
+	char m[100];//Uus massiiv m
+    printf("Kas soovite laenutada veel ühe raamatu?\n");//prindi ekraanile
         printf("-> 0 Jah\n");
         printf("-> 1 Ei\n");
-        if (fgets(m, sizeof m, stdin)) {
-            char* newline = strchr(m, '\n');
-            if (newline) {
-                *newline = 0;
+        if (fgets(m, sizeof m, stdin)) {//võta sisse kasutaja sisestus
+            char* newline = strchr(m, '\n');//pointer newline on esimene reavahetus sisestutud vastuses
+            if (newline) {//kontroll kas sisestuses on reavahetust ehk newline
+                *newline = 0;//eemalda reavahetus
             }
 			        }
-        k = atoi(m);
+        k = atoi(m); //atoi muudab stringi m integeriks ning k hoiab nüüd seda väärtust
 
     }
 
 
-    valimine(con, res, row, tegevus);
+    valimine(con, res, row, tegevus);//naase alamprogrammi valimine
 }
 
 void tagastamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
