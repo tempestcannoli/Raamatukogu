@@ -1627,48 +1627,51 @@ void laenutamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
             *newline = 0;//kui oli reavahetus, siis kustutab selle
         }
     }
-    laenutatud_id = atoi(e);
+    laenutatud_id = atoi(e);//atoi muudab stringi e integeriks ning laenutatud_id hoiab seda
     char laenid[100];
+    //lisab kokku MySQLi käsu ja kasutaja sisestatud vastuse
+    //näita tabelist laenutatud kõik mille id võrdub laenutatud_id-ga
     sprintf(laenid, "SELECT * FROM laenutatud WHERE id='%d'", laenutatud_id);
-    if (mysql_query(con, laenid)) {
-        fprintf(stderr, "%s\n", mysql_error(con));
-        exit(1);
+    if (mysql_query(con, laenid)) {//saadab käsu serverile
+        fprintf(stderr, "%s\n", mysql_error(con));//kui oli error prindi põhjus
+        exit(1);//ja lahku 
     }
-    res = mysql_use_result(con);
-    if(res != NULL){
-        printf("Laenutuse id on juba kasutusel!\n");
-        mysql_free_result(res);
-        laenutamine(con, res, row, tegevus);
+    res = mysql_use_result(con);//salvesta tulemus
+    if(res != NULL){//kui tulemus on olemas
+        printf("Laenutuse id on juba kasutusel!\n");//anna tekst
+        mysql_free_result(res);//vabasta tulemus
+        laenutamine(con, res, row, tegevus);//alusta alamprogrammi uuesti
     }
-    mysql_free_result(res);
+    mysql_free_result(res);//vabasta tulemus
 
 
     char f[10];
     int user_id;
-    printf("Sisestage laenutaja id:\n");
-    if (fgets(f, sizeof f, stdin)) {
-        char* newline = strchr(f, '\n');
-        if (newline) {
-            *newline = 0;
+    printf("Sisestage laenutaja id:\n");//küsi kasutajalt infot
+    if (fgets(f, sizeof f, stdin)) {//kui sistatakse tekst salvesta see f massiivi
+        char* newline = strchr(f, '\n');//otsib sisestuse läbi ning vaatab, kas selles on reavahetus
+        if (newline) {//kui on reavahetus
+            *newline = 0;//kustuta see
         }
     }
-    user_id = atoi(f);
+    user_id = atoi(f);//atoi muudab stringi f integeriks ning seda hoiab user_id
     char g[10];
     int worker_id;
-    printf("Sisestage töötaja id:\n");
-    if (fgets(g, sizeof g, stdin)) {
-        char* newline = strchr(g, '\n');
-        if (newline) {
-            *newline = 0;
+    printf("Sisestage töötaja id:\n");//küsi kasutajalt infot
+    if (fgets(g, sizeof g, stdin)) {//kui sistatakse tekst salvesta see g massiivi
+        char* newline = strchr(g, '\n');//otsib sisestuse läbi ning vaatab, kas selles on reavahetus
+        if (newline) {//kui on reavahetus
+            *newline = 0;//kustuta see
         }
     }
-    worker_id = atoi(g);
+    worker_id = atoi(g);//atoi muudab stringi g integeriks ning seda hoiab worker_id
     char kuupaev[20];
     printf("Sisestage kuupäev formaadis AASTA-KUU-PÄEV (nt. 2022-08-12):\n");
-    if (fgets(kuupaev, sizeof kuupaev, stdin)) {
-        char* newline = strchr(kuupaev, '\n');
-        if (newline) {
-            *newline = 0;
+   //küsi kasutajalt infot
+    if (fgets(kuupaev, sizeof kuupaev, stdin)) {/kui sistatakse tekst salvesta see kuupaev massiivi
+        char* newline = strchr(kuupaev, '\n');//otsib sisestuse läbi ning vaatab, kas selles on reavahetus
+        if (newline) {//kui on reavahetus
+            *newline = 0;//kustuta see
         }
     }
     len = strlen(g);
@@ -2332,7 +2335,7 @@ int valimine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
     printf("-> 2 Lisamine\n");
     printf("-> 3 Raamatute otsimine nime järgi\n");
     printf("-> 4 Raamatute otsimine autori või zanri järgi\n");
-    printf("-> 5 Raamatu laenutamine\n");
+    printf("-> 5 Raamatu\n");
     printf("-> 6 Raamatu tagastamine\n");
     printf("-> 7 Kustutamine\n");
     printf("-> 8 Muuda olemasolevat sissekannet\n");
