@@ -1,4 +1,4 @@
-//Kasutajaliidese proovimiseks võib kasutada kasutajanime „john“ ja salasõna „password“. 
+
 //Kasutajaliidest ei saa kasutada kui arvuti, milles andmebaas asub on kinni.
 #include <mysql/mysql.h>
 #include <stdio.h>
