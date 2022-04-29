@@ -1,4 +1,3 @@
-
 //Kasutajaliidest ei saa kasutada kui arvuti, milles andmebaas asub on kinni.
 #include <mysql/mysql.h>
 #include <stdio.h>
@@ -109,11 +108,12 @@ void lisamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
         exit(1); //kui tekib viga, lahkub programmist 
     }
     res = mysql_use_result(con); //salvestab saadud tulemused
-    if(res != NULL){ //kontrollib, kas on juba olemas vastav kirje
+    if(mysql_num_rows(res) != 0){ //kontrollib, kas on juba olemas vastav kirje
         printf("Raamat on juba andmebaasis olemas!\n"); //väljastab kasutajale teate
         mysql_free_result(res); //vabastab tulemused
         lisamine(con, res, row, tegevus); //alustab uuesti lisamise funktsiooniga
     }
+    mysql_free_result(res);
     //kui andmebaasis pole juba soovitud kirjet olemas siis jätkab siit
     sprintf(a, "INSERT INTO raamatud (nimi) VALUES ('%s')", raamat_nimi); //lisab kokku MySQLi käsu ja kasutaja sisestatud vastuse
 
@@ -133,7 +133,7 @@ void lisamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
     }
     mysql_free_result(res); //vabastab tulemused
 
-    int id = mysql_insert_id(con); //viimase INSERT käsu id
+    int id = mysql_insert_id(con); //viimase INSERT käsu id 
 
     printf("Kas soovite lisada žanri?\n"); //küsib kasutajalt, kas ta soovib ka žanri lisada
     printf("-> 1 Jah\n");
@@ -596,11 +596,12 @@ void autori_lisamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
             exit(1);//kui tekib viga, lahkub programmist 
         }
        res = mysql_use_result(con);//salvestab saadud tulemused
-       if(res != NULL){ //kui andmebaasis on juba selline sissekanne olemas
+       if(mysql_num_rows(res) != 0){ //kui andmebaasis on juba selline sissekanne olemas
            printf("Autor on juba andmebaasis olemas!\n");
             mysql_free_result(res);//vabastab tulemused
            autori_lisamine(con, res, row, tegevus);//alustab uuesti autori lisamist
         }
+        mysql_free_result(res);
         sprintf(a, "INSERT INTO autorid( nimi) VALUES ('%s')", autor_nimi);//lisab kokku MySQLi käsu ja kasutaja sisestatud vastuse
         if (mysql_query(con, a)) {//saadab käsu serverile
             fprintf(stderr, "%s\n", mysql_error(con));
@@ -1511,7 +1512,7 @@ void laenutamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
     if (fgets(vastus, sizeof vastus, stdin)) {//kui sisestatakse tekst, võta sisse kasutaja sisestatud tekst
         char* newline = strchr(vastus, '\n');//otsib sisestuse läbi ning vaatab, kas selles on reavahetus 
         if (newline) {
-            *newline = 0 //kui oli reavahetus, siis kustutab selle
+            *newline = 0; //kui oli reavahetus, siis kustutab selle
         }
     }
     int ix, jx, len;
@@ -1637,7 +1638,7 @@ void laenutamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
         exit(1);//ja lahku 
     }
     res = mysql_use_result(con);//salvesta tulemus
-    if(res != NULL){//kui tulemus on olemas
+    if(mysql_num_rows(res) != 0){//kui tulemus on olemas
         printf("Laenutuse id on juba kasutusel!\n");//anna tekst
         mysql_free_result(res);//vabasta tulemus
         laenutamine(con, res, row, tegevus);//alusta alamprogrammi uuesti
@@ -1668,7 +1669,7 @@ void laenutamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
     char kuupaev[20];
     printf("Sisestage kuupäev formaadis AASTA-KUU-PÄEV (nt. 2022-08-12):\n");
    //küsi kasutajalt infot
-    if (fgets(kuupaev, sizeof kuupaev, stdin)) {/kui sistatakse tekst salvesta see kuupaev massiivi
+    if (fgets(kuupaev, sizeof kuupaev, stdin)) {//kui sistatakse tekst salvesta see kuupaev massiivi
         char* newline = strchr(kuupaev, '\n');//otsib sisestuse läbi ning vaatab, kas selles on reavahetus
         if (newline) {//kui on reavahetus
             *newline = 0;//kustuta see
