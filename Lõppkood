@@ -1508,7 +1508,7 @@ void laenutamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
     while (k == 0) { //kuni k on null ole loopis
 
     printf("Sisestage raamatu nimi mida tahate laenutada:\n");//prindi ekraanile tekst
-    if (fgets(vastus, sizeof vastus, stdin)) {//võta sisse kasutaja sisestatud tekst
+    if (fgets(vastus, sizeof vastus, stdin)) {//kui sisestatakse tekst, võta sisse kasutaja sisestatud tekst
         char* newline = strchr(vastus, '\n');//otsib sisestuse läbi ning vaatab, kas selles on reavahetus 
         if (newline) {
             *newline = 0 //kui oli reavahetus, siis kustutab selle
@@ -1530,6 +1530,10 @@ void laenutamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
         }
     }
     //lisab kokku MySQLi käsu ja kasutaja sisestatud vastuse
+    /**Näita andmebaasist tabelist raamatud id ja nimi,tabelist autorid autori nimi. 
+    Selleks ühenda raamatud, raamatud_has_autorid kasutades raamatud id-d. 
+    Ühenda raamatud_has_autorid.raamatud_id autorite tabeliga. 
+    Otsi uuest ühendatud tabelist raamatuid mille nimi on sisestatud vastus**/ 
     sprintf(a, "SELECT raamatud.id, raamatud.nimi, autorid.nimi FROM raamatud JOIN raamatud_has_autorid ON raamatud.id = raamatud_has_autorid.raamatud_id JOIN autorid ON autorid.id = raamatud_has_autorid.autorid_id WHERE raamatud.nimi like '%%%s%%'", vastus);
     if (mysql_query(con, a)) {//saadab käsu serverile
         fprintf(stderr, "%s\n", mysql_error(con));//kui tekib viga, lahkub programmist
@@ -1545,75 +1549,82 @@ void laenutamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
         laenutamine(con, res, row, tegevus);//mine tagasi laenutamise alamprogrammi algusesse
     }
     mysql_free_result(res);//vabasta varem salvestatud tulemus
-    printf("Sisestage raamatu, mida soovite laenutada, id: \n");
-    if (fgets(b, sizeof b, stdin)) {
-        char* newline = strchr(b, '\n');
-        if (newline) {
+    printf("Sisestage raamatu, mida soovite laenutada, id: \n"); //prindi tekst
+    if (fgets(b, sizeof b, stdin)) {//kui sisestatakse tekst, võta sisse kasutaja sisestatud tekst
+        char* newline = strchr(b, '\n');//otsib sisestuse läbi ning vaatab, kas selles on reavahetus
+        if (newline) {//kui oli reavahetus, siis kustutab selle
             *newline = 0;
         }
     }
     char o[600];
+    //lisab kokku MySQLi käsu ja kasutaja sisestatud vastuse
+    //sama andmebaasi käsk, mis enne
      sprintf(o, "SELECT raamatud.id, raamatud.nimi, autorid.nimi FROM raamatud JOIN raamatud_has_autorid ON raamatud.id = raamatud_has_autorid.raamatud_id JOIN autorid ON autorid.id = raamatud_has_autorid.autorid_id WHERE raamatud.nimi like '%%%s%%'", vastus);
-    if (mysql_query(con, o)) {
-        fprintf(stderr, "%s\n", mysql_error(con));
-        exit(1);
+    if (mysql_query(con, o)) {//saadab käsu serverile
+        fprintf(stderr, "%s\n", mysql_error(con));//kui tekib viga prindi error
+        exit(1);//ja lahku programmist
     }
-    res = mysql_use_result(con);
-    if(res == NULL){
+    res = mysql_use_result(con);//kui ei tekkinud viga siis salvesta saadud tulemus
+    if(res == NULL){//kui res ei eksisteeri
         printf("Vastete seas pole sellist raamatut!\n");
-        laenutamine(con, res, row, tegevus);
+        laenutamine(con, res, row, tegevus);//alusta alamprogrammi laenutamine uuesti
     }
-    mysql_free_result(res);
-    raamat_id = atoi(b);
+    mysql_free_result(res);//vabasta varem salvestatud tulemus
+    raamat_id = atoi(b);//atoi muudab stringi b sisu integeriks ning raamat_id hoiab seda
+    //lisab kokku MySQLi käsu ja kasutaja sisestatud vastuse
+    /*Näita koopia id, raamatu nimi, koopia aasta ja keel, selleks ühenda kaks tabelit raamatud ja koopia
+    Ühendamiseks kasuta raamatu id-d. Raamatu id on kasutaja sisestatud suurus*/
     sprintf(c, "SELECT koopia.idkoopia, raamatud.nimi, koopia.aasta, koopia.keel FROM raamatud JOIN koopia ON raamatud.id = koopia.raamatud_id WHERE raamatud.id = '%d'", raamat_id);
-    if (mysql_query(con, c)) {
-        fprintf(stderr, "%s\n", mysql_error(con));
-        exit(1);
+    if (mysql_query(con, c)) {//saadab käsu serverile
+        fprintf(stderr, "%s\n", mysql_error(con));//prindi error kui tekkis viga
+        exit(1);//lahku programmist
     }
-    res = mysql_use_result(con);
-    while ((row = mysql_fetch_row(res)) != NULL) {
-        printf("%s %s %s %s \n", row[0], row[1], row[2], row[3]);
+    res = mysql_use_result(con);//salvesta saadud tulemus
+    while ((row = mysql_fetch_row(res)) != NULL) {//kuni saadud tulemusel on ridu
+        printf("%s %s %s %s \n", row[0], row[1], row[2], row[3]);//prindi read
     }
-    mysql_free_result(res);
+    mysql_free_result(res);//vabasta tulemus
     char n[600];
+    //lisab kokku MySQLi käsu ja kasutaja sisestatud vastuse
+    //sama käsk mis eelmine
     sprintf(n, "SELECT koopia.idkoopia, raamatud.nimi, koopia.aasta, koopia.keel FROM raamatud JOIN koopia ON raamatud.id = koopia.raamatud_id WHERE raamatud.id = '%d'", raamat_id);
-    if (mysql_query(con, n)) {
-        fprintf(stderr, "%s\n", mysql_error(con));
-        exit(1);
+    if (mysql_query(con, n)) {//kui tekib error
+        fprintf(stderr, "%s\n", mysql_error(con));//prindi error sõnum
+        exit(1);//välju programmist
     }
-    res = mysql_use_result(con);
-    if(res == NULL){
+    res = mysql_use_result(con);//kui polnud errorit salvesta saadud tulemus
+    if(res == NULL){//kui tulemus puudub
         printf("Vastete seas pole sellist koopiat!\n");
-        laenutamine(con, res, row, tegevus);
+        laenutamine(con, res, row, tegevus);//alusta alamprogrammi laenutamine uuesti
     }
-    mysql_free_result(res);
+    mysql_free_result(res);//vabasta tulemus
     char d[10];
     int koopia_id;
-    printf("Sisestage ülaltoodud koopiate seast meelepärane id: \n");
-    if (fgets(d, sizeof d, stdin)) {
-        char* newline = strchr(d, '\n');
-        if (newline) {
-            *newline = 0;
+    printf("Sisestage ülaltoodud koopiate seast meelepärane id: \n");//prindi tekst
+    if (fgets(d, sizeof d, stdin)) {//kui sisestatakse tekst
+        char* newline = strchr(d, '\n');//otsib sisestuse läbi ning vaatab, kas selles on reavahetus. Kui on salvestab newline'i
+        if (newline) {//kui newline eksisteerib
+            *newline = 0;//kui oli reavahetus, siis kustutab selle
         }
     }
-    koopia_id = atoi(d);
+    koopia_id = atoi(d);//atoid muudab stringi d väärtuse integeriks ning koopia-_d hoiab seda
     printf("Kasutusel olevad id numbrid:\n");
-    if (mysql_query(con, "SELECT * FROM laenutatud")) {
-        fprintf(stderr, "%s\n", mysql_error(con));
-        exit(1);
+    if (mysql_query(con, "SELECT * FROM laenutatud")) {//suhtle andmebaasiga, otsi tabelist laenutatud
+        fprintf(stderr, "%s\n", mysql_error(con));//kui ebaõnnestus prindi error
+        exit(1);//välju programmist
     }
-    res = mysql_use_result(con);
-    while ((row = mysql_fetch_row(res)) != NULL) {
-        printf("%s \n", row[0]);
+    res = mysql_use_result(con);//salvesta saadud tulemus
+    while ((row = mysql_fetch_row(res)) != NULL) {//kuni tulemusel on ridu
+        printf("%s \n", row[0]);//prindi need
     }
-    mysql_free_result(res);
+    mysql_free_result(res);//vabasta tulemus
     char e[10];
     int laenutatud_id;
-    printf("Sisestage vaba laenutuse id:\n");
-    if (fgets(e, sizeof e, stdin)) {
-        char* newline = strchr(e, '\n');
-        if (newline) {
-            *newline = 0;
+    printf("Sisestage vaba laenutuse id:\n");//prindi
+    if (fgets(e, sizeof e, stdin)) {//kui sisestatakse tekst
+        char* newline = strchr(e, '\n');//otsib sisestuse läbi ning vaatab, kas selles on reavahetus salvesta newline'i
+        if (newline) {//kui newline eksisteerib
+            *newline = 0;//kui oli reavahetus, siis kustutab selle
         }
     }
     laenutatud_id = atoi(e);
