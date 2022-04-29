@@ -1518,7 +1518,7 @@ void laenutamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
     len = strlen(vastus); //saame sisestatud teksti pikkuse
     for (ix = 0; ix < len; ix++) // loop mis käib kuni ix on väiksem sisestatud teksti pikkusest
     {
-        if (vastus[ix] == '\'')//kontroll kas karakter on \
+        if (vastus[ix] == '\'')//kontroll kas karakter on ülakoma
         {
             vastus[ix] = *hx; //karakter võrdub nüüd \0
             for (jx = ix; jx < len; jx++)//uus loop, mis vähendab vastuse pikkust
@@ -1674,31 +1674,34 @@ void laenutamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
             *newline = 0;//kustuta see
         }
     }
-    len = strlen(g);
-    for (ix = 0; ix < len; ix++)
+    len = strlen(g);//saame teada stringi g pikkuse
+    for (ix = 0; ix < len; ix++)//loop kuni ix on väiksem stringi g pikkusest
     {
-        if (g[ix] == '\'')
+        if (g[ix] == '\'')//kontroll kas karakter on ülakoma
         {
-            g[ix] = *hx;
-            for (jx = ix; jx < len; jx++)
+            g[ix] = *hx; //karakter võrdub nüüd \0
+            for (jx = ix; jx < len; jx++)////järgmised karakterid liigutab ettepoole
             {
                 g[jx] = g[jx + 1];
             }
-            len--;
-            ix--;
+            len--;//vähendab vastuse pikkust
+            ix--;//vähendab kontrollmuutujat
         }
     }
     char h[500];
     char i[200];
+    //lisab kokku MySQLi käsu ja kasutaja sisestatud vastuse
+    /*sisesta tabelisse laenutatud kasutaja sisestatud väärtused*/
     sprintf(h, "INSERT INTO laenutatud (id, kuupaev, users_idusers, worker_idworker) VALUES ('%d', '%s', '%d', '%d')", laenutatud_id, kuupaev, user_id, worker_id);
+    /*lisa koopia juurde laenutatud_id kuna ta on nüüd välja laenutatud*/
     sprintf(i, "UPDATE koopia SET laenutatud_id = '%d' WHERE idkoopia = '%d'", laenutatud_id, koopia_id);
-    if (mysql_query(con, h)) {
-        fprintf(stderr, "%s\n", mysql_error(con));
-        exit(1);
+    if (mysql_query(con, h)) {//kui serveriga suhtlemisel tekib viga
+        fprintf(stderr, "%s\n", mysql_error(con));//prindi veateade
+        exit(1);//lahku
     }
-    if (mysql_query(con, i)) {
-        fprintf(stderr, "%s\n", mysql_error(con));
-        exit(1);
+    if (mysql_query(con, i)) {//kui serveriga suhtlemisel tekib viga
+        fprintf(stderr, "%s\n", mysql_error(con));//prindi veateade
+        exit(1);//lahku
     }
 	char m[100];//Uus massiiv m
     printf("Kas soovite laenutada veel ühe raamatu?\n");//prindi ekraanile
