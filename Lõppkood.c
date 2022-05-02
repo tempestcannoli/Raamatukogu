@@ -102,7 +102,7 @@ void lisamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
         }
     }
 
-    sprintf(b, "SELECT *FROM raamatud WHERE nimi='%s'", raamat_nimi); //lisab kokku MySQLi käsu ja kasutaja sisestatud vastuse
+    sprintf(b, "SELECT *FROM raamatud WHERE nimi='%s'", raamat_nimi); //lisab kokku MySQLi käsu kus valitakse tabelist kõik nimed, mis on samad nagu sisestatud vastus ja kasutaja sisestatud vastuse
     if (mysql_query(con, b)) { //saadab käsu serverile
         fprintf(stderr, "%s\n", mysql_error(con));
         exit(1); //kui tekib viga, lahkub programmist 
@@ -115,13 +115,13 @@ void lisamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
     }
     mysql_free_result(res);
     //kui andmebaasis pole juba soovitud kirjet olemas siis jätkab siit
-    sprintf(a, "INSERT INTO raamatud (nimi) VALUES ('%s')", raamat_nimi); //lisab kokku MySQLi käsu ja kasutaja sisestatud vastuse
+    sprintf(a, "INSERT INTO raamatud (nimi) VALUES ('%s')", raamat_nimi); //lisab kokku MySQLi käsu millega sisestatakse tabelisse raamatu nimi ja kasutaja sisestatud vastuse
 
     if (mysql_query(con, a)) {//saadab käsu serverile
         fprintf(stderr, "%s\n", mysql_error(con));
         exit(1);//kui tekib viga, lahkub programmist 
     }
-    sprintf(b, "SELECT *FROM raamatud WHERE nimi='%s'", raamat_nimi); //lisab kokku MySQLi käsu ja kasutaja sisestatud vastuse
+    sprintf(b, "SELECT *FROM raamatud WHERE nimi='%s'", raamat_nimi); //lisab kokku MySQLi käsu millega valitakse sisestatud nimi ja kasutaja sisestatud vastuse
     if (mysql_query(con, b)) {//saadab käsu serverile
         fprintf(stderr, "%s\n", mysql_error(con));
         exit(1);//kui tekib viga, lahkub programmist 
@@ -155,7 +155,7 @@ void lisamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
             case 1:
                 while (u == 0) { //loop mitme žanri lisamiseks
                     printf("Andmebaasis olemas olevad žanrid:\n"); //näitab juba olemasolevaid žanreid
-                    if (mysql_query(con, "SELECT * FROM sanrid")) {//saadab käsu serverile
+                    if (mysql_query(con, "SELECT * FROM sanrid")) {//saadab käsu žanrite valimiseks serverile
                         fprintf(stderr, "%s\n", mysql_error(con));
                         exit(2);//kui tekib viga, lahkub programmist 
                     }
@@ -196,7 +196,7 @@ void lisamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
                                     }
                                 }
                                 sanr_id = atoi(e);//muudab vastuse numbriks
-                                sprintf(f, "INSERT INTO raamatud_has_sanrid(raamatud_id, sanrid_id) VALUES ('%d', '%d')", id, sanr_id);//lisab kokku MySQLi käsu ja kasutaja sisestatud vastused
+                                sprintf(f, "INSERT INTO raamatud_has_sanrid(raamatud_id, sanrid_id) VALUES ('%d', '%d')", id, sanr_id);//lisab kokku MySQLi käsu tabelisse lisamisesks ja kasutaja sisestatud vastused
                                 if (mysql_query(con, f)) {//saadab käsu serverile
                                     fprintf(stderr, "%s\n", mysql_error(con));
                                     exit(1);//kui tekib viga, lahkub programmist 
@@ -225,13 +225,13 @@ void lisamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
                                             ix--;//vähendab kontrollmuutujat
                                         }
                                     }
-                                    sprintf(h, "INSERT INTO sanrid( sanrinimi) VALUES ('%s')", g);//lisab kokku MySQLi käsu ja kasutaja sisestatud vastuse
+                                    sprintf(h, "INSERT INTO sanrid( sanrinimi) VALUES ('%s')", g);//lisab kokku MySQLi käsu tabelisse lisamiseks ja kasutaja sisestatud vastuse
                                     if (mysql_query(con, h)) {//saadab käsu serverile
                                         fprintf(stderr, "%s\n", mysql_error(con));
                                         exit(1);//kui tekib viga, lahkub programmist 
                                     }
                                     int id2 = mysql_insert_id(con);//viimase INSERT käsu id
-                                    sprintf(i, "INSERT INTO raamatud_has_sanrid (raamatud_id, sanrid_id) VALUES ('%d', '%d')", id, id2);//lisab kokku MySQLi käsu ja kasutaja sisestatud vastused
+                                    sprintf(i, "INSERT INTO raamatud_has_sanrid (raamatud_id, sanrid_id) VALUES ('%d', '%d')", id, id2);//lisab kokku MySQLi käsu tabelisse lisamiseks ja kasutaja sisestatud vastused
                                     if (mysql_query(con, i)) {//saadab käsu serverile
                                         fprintf(stderr, "%s\n", mysql_error(con));
                                         exit(1);//kui tekib viga, lahkub programmist 
@@ -287,7 +287,7 @@ void lisamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
             case 1: //kasutaja valis autori lisamise
                 while (k == 0) {
                     printf("Andmebaasis olemasolevad autorid:\n");//näitab andmebaasis olevaid autoreid
-                    if (mysql_query(con, "SELECT * FROM autorid")) {//saadab käsu serverile
+                    if (mysql_query(con, "SELECT * FROM autorid")) {//saadab käsu autorite valimiseks serverile
                         fprintf(stderr, "%s\n", mysql_error(con));
                         exit(2);//kui tekib viga, lahkub programmist 
                     }
@@ -329,7 +329,7 @@ void lisamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
                                     }
                                 }
                                 autor_id = atoi(e);//muudab vastuse numbriks
-                                sprintf(f, "INSERT INTO raamatud_has_autorid (raamatud_id, autorid_id) VALUES ('%d', '%d')", id, autor_id);//lisab kokku MySQLi käsu ja kasutaja sisestatud vastused
+                                sprintf(f, "INSERT INTO raamatud_has_autorid (raamatud_id, autorid_id) VALUES ('%d', '%d')", id, autor_id);//lisab kokku MySQLi käsu tabelisse lisamiseks ja kasutaja sisestatud vastused
                                 if (mysql_query(con, f)) {//saadab käsu serverile
                                     fprintf(stderr, "%s\n", mysql_error(con));
                                     exit(1);//kui tekib viga, lahkub programmist 
@@ -358,13 +358,13 @@ void lisamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
                                             ix--;//vähendab kontrollmuutujat
                                         }
                                     }
-                                    sprintf(h, "INSERT INTO autorid( nimi) VALUES ('%s')", g);//lisab kokku MySQLi käsu ja kasutaja sisestatud vastuse
+                                    sprintf(h, "INSERT INTO autorid( nimi) VALUES ('%s')", g);//lisab kokku MySQLi käsu tabelisse lisamiseks ja kasutaja sisestatud vastuse
                                     if (mysql_query(con, h)) {//saadab käsu serverile
                                         fprintf(stderr, "%s\n", mysql_error(con));
                                         exit(1);//kui tekib viga, lahkub programmist 
                                     }
                                     int id2 = mysql_insert_id(con);
-                                    sprintf(i, "INSERT INTO raamatud_has_autorid (raamatud_id, autorid_id) VALUES ('%d', '%d')", id, id2);//lisab kokku MySQLi käsu ja kasutaja sisestatud vastused
+                                    sprintf(i, "INSERT INTO raamatud_has_autorid (raamatud_id, autorid_id) VALUES ('%d', '%d')", id, id2);//lisab kokku MySQLi käsu tabelisse lisamiseks ja kasutaja sisestatud vastused
                                     if (mysql_query(con, i)) {//saadab käsu serverile
                                         fprintf(stderr, "%s\n", mysql_error(con));
                                         exit(1);//kui tekib viga, lahkub programmist 
@@ -486,7 +486,7 @@ void lisamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
                     }
                 }
 
-                if (mysql_query(con, "SELECT *FROM kohaviit")) {//saadab käsu serverile
+                if (mysql_query(con, "SELECT *FROM kohaviit")) {//saadab käsu kohaviitade valimiseks serverile
                     fprintf(stderr, "%s\n", mysql_error(con));
                     exit(1);//kui tekib viga, lahkub programmist 
                 }
@@ -515,7 +515,7 @@ void lisamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
                 kohaviit_id = atoi(d);//muudab vastuse numbriks
                 int i;
                 for (i = 0; i < valik; i++) {
-                    sprintf(a, "INSERT INTO koopia (aasta, triipkood, keel, raamatud_id, kohaviit_id) VALUES ('%s', '%s', '%s', '%d', '%d')", aasta, triipkood, keel, id, kohaviit_id);//lisab kokku MySQLi käsu ja kasutaja sisestatud vastused
+                    sprintf(a, "INSERT INTO koopia (aasta, triipkood, keel, raamatud_id, kohaviit_id) VALUES ('%s', '%s', '%s', '%d', '%d')", aasta, triipkood, keel, id, kohaviit_id);//lisab kokku MySQLi käsu tabelisse lisamiseks ja kasutaja sisestatud vastused
                     if (mysql_query(con, a)) {//saadab käsu serverile
                         fprintf(stderr, "%s\n", mysql_error(con));
                         exit(1);//kui tekib viga, lahkub programmist 
@@ -590,7 +590,7 @@ void autori_lisamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
             }
         }
         char d[100];
-        sprintf(d, "SELECT *FROM autorid WHERE nimi='%s'", autor_nimi);
+        sprintf(d, "SELECT *FROM autorid WHERE nimi='%s'", autor_nimi);//lisab kokku MySQLi käsu sama nimega autori valimiseks ja kasutaja sisestatud vastuse
         if (mysql_query(con, d)) {//saadab käsu serverile
             fprintf(stderr, "%s\n", mysql_error(con));
             exit(1);//kui tekib viga, lahkub programmist 
@@ -602,12 +602,12 @@ void autori_lisamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
            autori_lisamine(con, res, row, tegevus);//alustab uuesti autori lisamist
         }
         mysql_free_result(res);
-        sprintf(a, "INSERT INTO autorid( nimi) VALUES ('%s')", autor_nimi);//lisab kokku MySQLi käsu ja kasutaja sisestatud vastuse
+        sprintf(a, "INSERT INTO autorid( nimi) VALUES ('%s')", autor_nimi);//lisab kokku MySQLi käsu tabelisse lisamiseks ja kasutaja sisestatud vastuse
         if (mysql_query(con, a)) {//saadab käsu serverile
             fprintf(stderr, "%s\n", mysql_error(con));
             exit(1);//kui tekib viga, lahkub programmist 
         }
-        sprintf(b, "SELECT *FROM autorid WHERE nimi='%s'", autor_nimi);//lisab kokku MySQLi käsu ja kasutaja sisestatud vastuse
+        sprintf(b, "SELECT *FROM autorid WHERE nimi='%s'", autor_nimi);//lisab kokku MySQLi käsu sama nimega autori valimiseks ja kasutaja sisestatud vastuse
         if (mysql_query(con, b)) {//saadab käsu serverile
             fprintf(stderr, "%s\n", mysql_error(con));
             exit(1);//kui tekib viga, lahkub programmist 
@@ -646,7 +646,7 @@ void zanri_lisamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
     char *hx = "\0";//muutuja ülakoma eemaldamiseks
     while (k == 0) {//loop mitme žanri lisamiseks
 		printf("Andmebaasis olevad žanrid:\n");//näitab andmebaasis olemasolevaid žanreid
-       if (mysql_query(con, "SELECT *FROM sanrid")) {//saadab käsu serverile
+       if (mysql_query(con, "SELECT *FROM sanrid")) {//saadab käsu kõikide žanrite valimiseks serverile
         fprintf(stderr, "%s\n", mysql_error(con));
         exit(1);//kui tekib viga, lahkub programmist 
        }
@@ -678,13 +678,13 @@ void zanri_lisamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
                 }
             }
 
-            sprintf(a, "INSERT INTO sanrid(sanrinimi) VALUES ('%s')", zanr_nimi);//lisab kokku MySQLi käsu ja kasutaja sisestatud vastuse
+            sprintf(a, "INSERT INTO sanrid(sanrinimi) VALUES ('%s')", zanr_nimi);//lisab kokku MySQLi käsu tabelisse lisamiseks ja kasutaja sisestatud vastuse
             if (mysql_query(con, a)) {//saadab käsu serverile
                 fprintf(stderr, "%s\n", mysql_error(con));
                 exit(1);//kui tekib viga, lahkub programmist 
             }
 
-            sprintf(b, "SELECT *FROM sanrid WHERE sanrinimi='%s'", zanr_nimi);//lisab kokku MySQLi käsu ja kasutaja sisestatud vastuse
+            sprintf(b, "SELECT *FROM sanrid WHERE sanrinimi='%s'", zanr_nimi);//lisab kokku MySQLi käsu sama nimega žanri valimiseks ja kasutaja sisestatud vastuse
             if (mysql_query(con, b)) {//saadab käsu serverile
                 fprintf(stderr, "%s\n", mysql_error(con));
                 exit(1);//kui tekib viga, lahkub programmist 
@@ -722,7 +722,7 @@ void raamatule_autor(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
     char *hx = "\0";//muutuja ülakoma eemaldamiseks
     while (k == 0) {//loop mitme autori lisamiseks
 		printf("Raamatud ja nende id-d:\n");
-       if (mysql_query(con, "SELECT *FROM raamatud")) {//saadab käsu serverile
+       if (mysql_query(con, "SELECT *FROM raamatud")) {//saadab käsu kõikde raamatute valimiseks serverile
         fprintf(stderr, "%s\n", mysql_error(con));
         exit(1);//kui tekib viga, lahkub programmist 
        }
@@ -732,7 +732,7 @@ void raamatule_autor(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
         }
 
         printf("Andmebaasis olemas olevad autorid:\n");
-        if (mysql_query(con, "SELECT * FROM autorid")) {//saadab käsu serverile
+        if (mysql_query(con, "SELECT * FROM autorid")) {//saadab käsu kõikide autorite valimiseks serverile
             fprintf(stderr, "%s\n", mysql_error(con));
             exit(2);//kui tekib viga, lahkub programmist 
         }
@@ -782,7 +782,7 @@ void raamatule_autor(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
                         }
                     }
                     raamat_id = atoi(c);//muudab vastuse numbriks
-                    sprintf(a, "INSERT INTO raamatud_has_autorid (raamatud_id, autorid_id) VALUES ('%d', '%d')", raamat_id, autor_id);//lisab kokku MySQLi käsu ja kasutaja sisestatud vastused
+                    sprintf(a, "INSERT INTO raamatud_has_autorid (raamatud_id, autorid_id) VALUES ('%d', '%d')", raamat_id, autor_id);//lisab kokku MySQLi käsu tabelisse lisamiseks ja kasutaja sisestatud vastused
                     if (mysql_query(con, a)) {//saadab käsu serverile
                         fprintf(stderr, "%s\n", mysql_error(con));
                         exit(1);//kui tekib viga, lahkub programmist 
@@ -823,7 +823,7 @@ void raamatule_autor(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
                             ix--;//vähendab kontrollmuutujat
                         }
                     }
-                    sprintf(f, "INSERT INTO autorid (id, nimi) VALUES ('%d', '%s')", autor_id, e);//lisab kokku MySQLi käsu ja kasutaja sisestatud vastused
+                    sprintf(f, "INSERT INTO autorid (id, nimi) VALUES ('%d', '%s')", autor_id, e);//lisab kokku MySQLi käsu tabelisse lisamiseks ja kasutaja sisestatud vastused
                     if (mysql_query(con, f)) {//saadab käsu serverile
                         fprintf(stderr, "%s\n", mysql_error(con));
                         exit(1);//kui tekib viga, lahkub programmist 
@@ -837,7 +837,7 @@ void raamatule_autor(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
                         }
                     }
                     raamat_id = atoi(c);//muudab vastuse numbriks
-                    sprintf(a, "INSERT INTO raamatud_has_autorid (raamatud_id, autorid_id) VALUES ('%d', '%d')", raamat_id, autor_id);//lisab kokku MySQLi käsu ja kasutaja sisestatud vastused
+                    sprintf(a, "INSERT INTO raamatud_has_autorid (raamatud_id, autorid_id) VALUES ('%d', '%d')", raamat_id, autor_id);//lisab kokku MySQLi käsu tabelisse lisamiseks ja kasutaja sisestatud vastused
                     if (mysql_query(con, a)) {//saadab käsu serverile
                         fprintf(stderr, "%s\n", mysql_error(con));
                         exit(1);//kui tekib viga, lahkub programmist 
@@ -877,7 +877,7 @@ void raamatule_zanr(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
     char *hx = "\0";//muutuja ülakoma eemaldamiseks
     while (k == 0) {//loop mitme žanri lisamiseks
 		printf("Raamatud ja nende id-d:\n");
-       if (mysql_query(con, "SELECT *FROM raamatud")) {//saadab käsu serverile
+       if (mysql_query(con, "SELECT *FROM raamatud")) {//saadab käsu kõikide raamatute valimiseks serverile
         fprintf(stderr, "%s\n", mysql_error(con));
         exit(1);//kui tekib viga, lahkub programmist 
        }
@@ -887,7 +887,7 @@ void raamatule_zanr(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
         }
 
         printf("Žanrid ja nende id-d:\n");
-        if (mysql_query(con, "SELECT * FROM sanrid")) {//saadab käsu serverile
+        if (mysql_query(con, "SELECT * FROM sanrid")) {//saadab käsu kõikide žanrite valimiseks serverile
             fprintf(stderr, "%s\n", mysql_error(con));
             exit(2);//kui tekib viga, lahkub programmist 
         }
@@ -938,7 +938,7 @@ void raamatule_zanr(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
 
                         }
                     raamat_id = atoi(c);//muudab vastuse numbriks
-                    sprintf(a, "INSERT INTO raamatud_has_sanrid (raamatud_id, sanrid_id) VALUES ('%d', '%d')", raamat_id, zanr_id);//lisab kokku MySQLi käsu ja kasutaja sisestatud vastused
+                    sprintf(a, "INSERT INTO raamatud_has_sanrid (raamatud_id, sanrid_id) VALUES ('%d', '%d')", raamat_id, zanr_id);//lisab kokku MySQLi käsu tabelisse lisamiseks ja kasutaja sisestatud vastused
                     if (mysql_query(con, a)) {//saadab käsu serverile
                         fprintf(stderr, "%s\n", mysql_error(con));
                         exit(1);//kui tekib viga, lahkub programmist 
@@ -970,7 +970,7 @@ void raamatule_zanr(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
                             ix--;//vähendab kontrollmuutujat
                         }
                     }
-                    sprintf(f, "INSERT INTO sanrid (sanrinimi) VALUES ('%s')", g);//lisab kokku MySQLi käsu ja kasutaja sisestatud vastuse
+                    sprintf(f, "INSERT INTO sanrid (sanrinimi) VALUES ('%s')", g);//lisab kokku MySQLi käsu tabelisse lisamiseks ja kasutaja sisestatud vastuse
                     if (mysql_query(con, f)) {//saadab käsu serverile
                         fprintf(stderr, "%s\n", mysql_error(con));
                         exit(1);//kui tekib viga, lahkub programmist 
@@ -986,7 +986,7 @@ void raamatule_zanr(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
                     }
 
                     raamat_id = atoi(c);//muudab vastuse numbriks
-                    sprintf(a, "INSERT INTO raamatud_has_sanrid (raamatud_id, sanrid_id) VALUES ('%d', '%d')", raamat_id, sanr_id);//lisab kokku MySQLi käsu ja kasutaja sisestatud vastused
+                    sprintf(a, "INSERT INTO raamatud_has_sanrid (raamatud_id, sanrid_id) VALUES ('%d', '%d')", raamat_id, sanr_id);//lisab kokku MySQLi käsu tabelisse lisamiseks ja kasutaja sisestatud vastused
                     if (mysql_query(con, a)) {//saadab käsu serverile
                         fprintf(stderr, "%s\n", mysql_error(con));
                         exit(1);//kui tekib viga, lahkub programmist 
@@ -1023,7 +1023,7 @@ void kohaviida_lisamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) 
     char *hx = "\0";//muutuja ülakoma eemaldamiseks
     int k = 0;
     while (k == 0) {//loop mitme kohaviida lisamiseks
-        if (mysql_query(con, "SELECT *FROM kohaviit")) {//saadab käsu serverile
+        if (mysql_query(con, "SELECT *FROM kohaviit")) {//saadab käsu kõikide kohaviitade valimiseks serverile
         fprintf(stderr, "%s\n", mysql_error(con));
         exit(1);//kui tekib viga, lahkub programmist 
        }
@@ -1055,12 +1055,12 @@ void kohaviida_lisamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) 
                 ix--;//vähendab kontrollmuutujat
             }
         }
-        sprintf(a, "INSERT INTO kohaviit (kohaviit) VALUES ('%s')", kohaviit);//lisab kokku MySQLi käsu ja kasutaja sisestatud vastuse
+        sprintf(a, "INSERT INTO kohaviit (kohaviit) VALUES ('%s')", kohaviit);//lisab kokku MySQLi käsu tabelisse lisamiseks ja kasutaja sisestatud vastuse
         if (mysql_query(con, a)) {//saadab käsu serverile
             fprintf(stderr, "%s\n", mysql_error(con));
             exit(1);//kui tekib viga, lahkub programmist 
         }
-        sprintf(b, "SELECT *FROM kohaviit WHERE kohaviit='%s'", kohaviit);//lisab kokku MySQLi käsu ja kasutaja sisestatud vastuse
+        sprintf(b, "SELECT *FROM kohaviit WHERE kohaviit='%s'", kohaviit);//lisab kokku MySQLi käsu sisestatud kohaviida valimiseks ja kasutaja sisestatud vastuse
         if (mysql_query(con, b)) {//saadab käsu serverile
             fprintf(stderr, "%s\n", mysql_error(con));
             exit(1);//kui tekib viga, lahkub programmist 
@@ -1101,7 +1101,7 @@ void koopia_lisamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
     char *hx = "\0";//muutuja ülakoma eemaldamiseks
     while (n == 0) {//loop mitme koopia lisamiseks
 
-        if (mysql_query(con, "SELECT *FROM raamatud")) {//saadab käsu serverile
+        if (mysql_query(con, "SELECT *FROM raamatud")) {//saadab käsu kõikide raamatute valimiseks serverile
             fprintf(stderr, "%s\n", mysql_error(con));
             exit(1);//kui tekib viga, lahkub programmist 
         }
@@ -1186,7 +1186,7 @@ void koopia_lisamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
             }
         }
 
-        if (mysql_query(con, "SELECT *FROM kohaviit")) {//saadab käsu serverile
+        if (mysql_query(con, "SELECT *FROM kohaviit")) {//saadab käsu kõikide kohaviitade valimiseks serverile
             fprintf(stderr, "%s\n", mysql_error(con));
             exit(1);//kui tekib viga, lahkub programmist 
         }
@@ -1216,7 +1216,7 @@ void koopia_lisamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
         kohaviit_id = atoi(d);//muudab vastuse numbriks
         int i;
         for (i = 0; i < valik; i++) {
-            sprintf(a, "INSERT INTO koopia (aasta, triipkood, keel, raamatud_id, kohaviit_id) VALUES ('%s', '%s', '%s', '%d', '%d')", aasta, triipkood, keel, raamatud_id, kohaviit_id);//lisab kokku MySQLi käsu ja kasutaja sisestatud vastused
+            sprintf(a, "INSERT INTO koopia (aasta, triipkood, keel, raamatud_id, kohaviit_id) VALUES ('%s', '%s', '%s', '%d', '%d')", aasta, triipkood, keel, raamatud_id, kohaviit_id);//lisab kokku MySQLi käsu tabelisse lisamiseks ja kasutaja sisestatud vastused
             if (mysql_query(con, a)) {//saadab käsu serverile
                 fprintf(stderr, "%s\n", mysql_error(con));
                 exit(1);//kui tekib viga, lahkub programmist 
@@ -1246,7 +1246,7 @@ void kuvamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
     int id = mysql_insert_id(con); //viimase INSERT käsu id
 
     printf("The last inserted row id is: %d\n", id); //prindib välja eelnevalt saadud id
-    if (mysql_query(con, "SELECT raamatud.nimi, autorid.nimi FROM raamatud JOIN raamatud_has_autorid ON raamatud.id = raamatud_has_autorid.raamatud_id JOIN autorid ON autorid.id = raamatud_has_autorid.autorid_id")) { //saadab käsu serverile
+    if (mysql_query(con, "SELECT raamatud.nimi, autorid.nimi FROM raamatud JOIN raamatud_has_autorid ON raamatud.id = raamatud_has_autorid.raamatud_id JOIN autorid ON autorid.id = raamatud_has_autorid.autorid_id")) { //saadab käsu raamatute ja autorite valimiseks serverile
         fprintf(stderr, "%s\n", mysql_error(con));
         exit(2); //kui tekib viga, lahkub programmist 
     }
@@ -1262,7 +1262,7 @@ void kuvamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
 
 void autori_kuvamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
 
-    if (mysql_query(con, "SELECT * FROM autorid")) {//saadab käsu serverile
+    if (mysql_query(con, "SELECT * FROM autorid")) {//saadab käsu kõikide autorite valimiseks serverile
         fprintf(stderr, "%s\n", mysql_error(con));
         exit(2);//kui tekib viga, lahkub programmist 
     }
@@ -1278,7 +1278,7 @@ void autori_kuvamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
 
 void zanri_kuvamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
 
-    if (mysql_query(con, "SELECT * FROM sanrid")) {//saadab käsu serverile
+    if (mysql_query(con, "SELECT * FROM sanrid")) {//saadab käsu kõikide žanrite valimiseks serverile
         fprintf(stderr, "%s\n", mysql_error(con));
         exit(2);//kui tekib viga, lahkub programmist 
     }
@@ -1309,7 +1309,7 @@ void koopia_kuvamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus){
         if(tegevus11 > 0 && tegevus11 < 3){//sisestatud vastus peab olema arvude 0 ja 3 vahel
             switch(tegevus11){
                 case 1://kui valitakse esimene tegevus
-                    if (mysql_query(con, "SELECT * FROM koopia WHERE laenutatud_id IS NULL")) {//saadab käsu serverile
+                    if (mysql_query(con, "SELECT * FROM koopia WHERE laenutatud_id IS NULL")) {//saadab käsu olemasolevate koopiate valimiseks serverile
                         fprintf(stderr, "%s\n", mysql_error(con));//kui tekib viga, lahkub programmist 
                         exit(2);
                     }
@@ -1322,7 +1322,7 @@ void koopia_kuvamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus){
                     valimine(con, res, row, tegevus);//tagasi valimise menüüsse
                     break;
                 case 2://kui valitakse teine tegevus
-                    if (mysql_query(con, "SELECT * FROM koopia WHERE laenutatud_id IS NOT NULL")) {//saadab käsu serverile
+                    if (mysql_query(con, "SELECT * FROM koopia WHERE laenutatud_id IS NOT NULL")) {//saadab käsu laenutatud koopiate valimiseks serverile
                         fprintf(stderr, "%s\n", mysql_error(con));
                         exit(2);//kui tekib viga, lahkub programmist 
                     }
@@ -1369,7 +1369,7 @@ void otsimine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
         }
     }
 
-    sprintf(a, "SELECT raamatud.nimi, autorid.nimi FROM raamatud JOIN raamatud_has_autorid ON raamatud.id = raamatud_has_autorid.raamatud_id JOIN autorid ON autorid.id = raamatud_has_autorid.autorid_id WHERE raamatud.nimi like '%%%s%%'", vastus);//lisab kokku MySQLi käsu ja kasutaja sisestatud vastuse
+    sprintf(a, "SELECT raamatud.nimi, autorid.nimi FROM raamatud JOIN raamatud_has_autorid ON raamatud.id = raamatud_has_autorid.raamatud_id JOIN autorid ON autorid.id = raamatud_has_autorid.autorid_id WHERE raamatud.nimi like '%%%s%%'", vastus);//lisab kokku MySQLi käsu sarnaste nimedega raamatute koos autoitega valimiseks ja kasutaja sisestatud vastuse
     if (mysql_query(con, a)) {//saadab käsu serverile
         fprintf(stderr, "%s\n", mysql_error(con));
         exit(1);//kui tekib viga, lahkub programmist 
@@ -1402,7 +1402,7 @@ void autori_otsimine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus){
     char a[500];
 	int k = 0;
     while (k == 0) { //loop mitme raamatu otsimiseks
-    if (mysql_query(con, "SELECT * FROM autorid")) {//saadab käsu serverile
+    if (mysql_query(con, "SELECT * FROM autorid")) {//saadab käsu kõikide autorite valimiseks serverile
         fprintf(stderr, "%s\n", mysql_error(con));
         exit(1);//kui tekib viga, lahkub programmist 
     }
@@ -1419,7 +1419,7 @@ void autori_otsimine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus){
         }
     }
     int id = atoi(vastus);//muudab vastuse numbriks
-    sprintf(a, "SELECT raamatud.nimi FROM raamatud JOIN raamatud_has_autorid ON raamatud.id = raamatud_has_autorid.raamatud_id WHERE raamatud_has_autorid.autorid_id = '%d'", id);//lisab kokku MySQLi käsu ja kasutaja sisestatud vastuse
+    sprintf(a, "SELECT raamatud.nimi FROM raamatud JOIN raamatud_has_autorid ON raamatud.id = raamatud_has_autorid.raamatud_id WHERE raamatud_has_autorid.autorid_id = '%d'", id);//lisab kokku MySQLi käsu autori raamatute valimiseks ja kasutaja sisestatud vastuse
     if (mysql_query(con, a)) {//saadab käsu serverile
         fprintf(stderr, "%s\n", mysql_error(con));
         exit(1);//kui tekib viga, lahkub programmist 
@@ -1453,7 +1453,7 @@ void zanri_otsimine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus){
     char a[500];
 	int k = 0;
     while (k == 0) { //loop mitme raamatu otsimiseks
-    if (mysql_query(con, "SELECT * FROM sanrid")) {//saadab käsu serverile
+    if (mysql_query(con, "SELECT * FROM sanrid")) {//saadab käsu kõikide žanrite valimiseks serverile
         fprintf(stderr, "%s\n", mysql_error(con));
         exit(1);//kui tekib viga, lahkub programmist 
     }
@@ -1470,7 +1470,7 @@ void zanri_otsimine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus){
         }
     }
     int id = atoi(vastus);//muudab vastuse numbriks
-    sprintf(a, "SELECT raamatud.nimi FROM raamatud JOIN raamatud_has_sanrid ON raamatud.id = raamatud_has_sanrid.raamatud_id WHERE raamatud_has_sanrid.sanrid_id = '%d'", id);//lisab kokku MySQLi käsu ja kasutaja sisestatud vastuse
+    sprintf(a, "SELECT raamatud.nimi FROM raamatud JOIN raamatud_has_sanrid ON raamatud.id = raamatud_has_sanrid.raamatud_id WHERE raamatud_has_sanrid.sanrid_id = '%d'", id);//lisab kokku MySQLi käsu žanri raamatute valimiseks ja kasutaja sisestatud vastuse
     if (mysql_query(con, a)) {//saadab käsu serverile
         fprintf(stderr, "%s\n", mysql_error(con));
         exit(1);//kui tekib viga, lahkub programmist 
@@ -1741,7 +1741,7 @@ void tagastamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
     t = time(NULL); //muutuja väärtuseks hetke aeg 
     struct tm tm = *localtime(&t); //salvestab aja structi
     printf("Tänane kuupäev:\n%d-%d-%d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday);//prindib välja saadud kuupäeva
-    sprintf(a, "SELECT kuupaev FROM laenutatud WHERE id = '%d'", laenutatud_id);//lisab kokku MySQLi käsu ja kasutaja sisestatud vastuse
+    sprintf(a, "SELECT kuupaev FROM laenutatud WHERE id = '%d'", laenutatud_id);//lisab kokku MySQLi käsu sisestatud id-ga raamatu tagastuskuupäeva valimiseks ja kasutaja sisestatud vastuse
 
     printf("\nTagastus kuupäev:\n");
     if (mysql_query(con, a)) {//saadab käsu serverile
@@ -1753,14 +1753,14 @@ void tagastamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
         printf("%s \n", row[0]);//väljastab tulemused
     }
     mysql_free_result(res);//vabastab tulemused
-    sprintf(b, "UPDATE koopia SET laenutatud_id =null WHERE laenutatud_id = '%d'", laenutatud_id);//lisab kokku MySQLi käsu ja kasutaja sisestatud vastuse
+    sprintf(b, "UPDATE koopia SET laenutatud_id =null WHERE laenutatud_id = '%d'", laenutatud_id);//lisab kokku MySQLi käsu laenutatud_id muutmiseks ja kasutaja sisestatud vastuse
     if (mysql_query(con, b)) {//saadab käsu serverile
         fprintf(stderr, "%s\n", mysql_error(con));
         exit(1);//kui tekib viga, lahkub programmist 
     }
 
 
-    sprintf(a, "DELETE FROM laenutatud WHERE id ='%d'", laenutatud_id);//lisab kokku MySQLi käsu ja kasutaja sisestatud vastuse
+    sprintf(a, "DELETE FROM laenutatud WHERE id ='%d'", laenutatud_id);//lisab kokku MySQLi käsu koopia laenutatud raamatute seast kustutamiseks ja kasutaja sisestatud vastuse
     if (mysql_query(con, a)) {//saadab käsu serverile
         fprintf(stderr, "%s\n", mysql_error(con));
         exit(1);//kui tekib viga, lahkub programmist 
@@ -1822,7 +1822,7 @@ void nime_muutmine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
     }
     int idnimi;
     idnimi = atoi(e);//muudab vastuse numbriks
-    sprintf(b, "UPDATE raamatud SET nimi='%s' WHERE id='%d'", nimi, idnimi);//lisab kokku MySQLi käsu ja kasutaja sisestatud vastuse
+    sprintf(b, "UPDATE raamatud SET nimi='%s' WHERE id='%d'", nimi, idnimi);//lisab kokku MySQLi käsu raamatu andmete muutmiseks ja kasutaja sisestatud vastuse
     if (mysql_query(con, b)) {//saadab käsu serverile
         fprintf(stderr, "%s\n", mysql_error(con));
         exit(1);//kui tekib viga, lahkub programmist 
@@ -1867,7 +1867,7 @@ void autori_muutmine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
     }
     int idnimi;
     idnimi = atoi(e);//muudab vastuse numbriks
-    sprintf(b, "UPDATE autorid SET nimi='%s' WHERE id='%d'", nimi, idnimi);//lisab kokku MySQLi käsu ja kasutaja sisestatud vastuse
+    sprintf(b, "UPDATE autorid SET nimi='%s' WHERE id='%d'", nimi, idnimi);//lisab kokku MySQLi käsu autori andmete uuendamiseks ja kasutaja sisestatud vastuse
     if (mysql_query(con, b)) {//saadab käsu serverile
         fprintf(stderr, "%s\n", mysql_error(con));
         exit(1);//kui tekib viga, lahkub programmist 
@@ -1912,7 +1912,7 @@ void zanri_muutmine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
     }
     int idnimi;
     idnimi = atoi(e);//muudab vastuse numbriks
-    sprintf(b, "UPDATE sanrid SET sanrinimi='%s' WHERE id='%d'", nimi, idnimi);//lisab kokku MySQLi käsu ja kasutaja sisestatud vastuse
+    sprintf(b, "UPDATE sanrid SET sanrinimi='%s' WHERE id='%d'", nimi, idnimi);//lisab kokku MySQLi käsu žanri andmete muutmiseks ja kasutaja sisestatud vastuse
     if (mysql_query(con, b)) {//saadab käsu serverile
         fprintf(stderr, "%s\n", mysql_error(con));
         exit(1);//kui tekib viga, lahkub 
@@ -1927,136 +1927,136 @@ void uus_kasutaja(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
     char num[100];
     char l[900];
     char b[800];
-    char *hx = "\0";
+    char *hx = "\0";//muutuja ülakoma eemaldamiseks
     printf("Sisestage kasutaja nimi\n");
-    if (fgets(name, sizeof name, stdin)) {
-        char* newline = strchr(name, '\n');
+    if (fgets(name, sizeof name, stdin)) {//loeb kasutaja sisestust
+        char* newline = strchr(name, '\n');//otsib sisestuse läbi ning vaatab, kas selles on reavahetus 
         if (newline) {
-            *newline = 0;
+            *newline = 0;//kui reavahetus oli, siis kustutab selle
         }
     }
     int ix, jx, len;
-    len = strlen(name);
-    for (ix = 0; ix < len; ix++)
+    len = strlen(name);//kontrolli jaoks vastuse pikkus
+    for (ix = 0; ix < len; ix++)//loop ülakoma kontrolliks
     {
         if (name[ix] == '\'')
         {
-            name[ix] = *hx;
+            name[ix] = *hx;//kui ülakoma on, siis kustutab selle karakteri
             for (jx = ix; jx < len; jx++)
             {
-                name[jx] = name[jx + 1];
+                name[jx] = name[jx + 1];//järgmised karakterid liigutab ettepoole
             }
-            len--;
-            ix--;
+            len--;//vähendab vastuse pikkust
+            ix--;//vähendab kontrollmuutujat
         }
     }
     printf("Sisestage kasutaja aadress\n");
-    if (fgets(ad, sizeof ad, stdin)) {
-        char* newline = strchr(ad, '\n');
+    if (fgets(ad, sizeof ad, stdin)) {//loeb kasutaja sisestust
+        char* newline = strchr(ad, '\n');//otsib sisestuse läbi ning vaatab, kas selles on reavahetus 
         if (newline) {
-            *newline = 0;
+            *newline = 0;//kui reavahetus oli, siis kustutab selle
         }
     }
-    len = strlen(ad);
-    for (ix = 0; ix < len; ix++)
+    len = strlen(ad);//kontrolli jaoks vastuse pikkus
+    for (ix = 0; ix < len; ix++)//loop ülakoma kontrolliks
     {
         if (ad[ix] == '\'')
         {
-            ad[ix] = *hx;
+            ad[ix] = *hx;//kui ülakoma on, siis kustutab selle karakteri
             for (jx = ix; jx < len; jx++)
             {
-                ad[jx] = ad[jx + 1];
+                ad[jx] = ad[jx + 1];//järgmised karakterid liigutab ettepoole
             }
-            len--;
-            ix--;
+            len--;//vähendab vastuse pikkust
+            ix--;//vähendab kontrollmuutujat
         }
     }
     printf("Sisestage kasutaja telefoni number\n");
-    if (fgets(num, sizeof num, stdin)) {
-        char* newline = strchr(num, '\n');
+    if (fgets(num, sizeof num, stdin)) {//loeb kasutaja sisestust
+        char* newline = strchr(num, '\n');//otsib sisestuse läbi ning vaatab, kas selles on reavahetus 
         if (newline) {
-            *newline = 0;
+            *newline = 0;//kui reavahetus oli, siis kustutab selle
         }
     }
-    len = strlen(num);
-    for (ix = 0; ix < len; ix++)
+    len = strlen(num);//kontrolli jaoks vastuse pikkus
+    for (ix = 0; ix < len; ix++)//loop ülakoma kontrolliks
     {
         if (num[ix] == '\'')
         {
-            num[ix] = *hx;
+            num[ix] = *hx;//kui ülakoma on, siis kustutab selle karakteri
             for (jx = ix; jx < len; jx++)
             {
-                num[jx] = num[jx + 1];
+                num[jx] = num[jx + 1];//järgmised karakterid liigutab ettepoole
             }
-            len--;
-            ix--;
+            len--;//vähendab vastuse pikkust
+            ix--;//vähendab kontrollmuutujat
         }
     }
-    sprintf(l, "INSERT INTO users (nimi, aadress, number) VALUES ('%s', '%s', '%s')", name, ad, num);
-    if (mysql_query(con, l)) {
+    sprintf(l, "INSERT INTO users (nimi, aadress, number) VALUES ('%s', '%s', '%s')", name, ad, num);//lisab kokku MySQLi käsu tabelisse andmete lisamiseks ja kasutaja sisestatud vastuse
+    if (mysql_query(con, l)) {//saadab käsu serverile
         fprintf(stderr, "%s\n", mysql_error(con));
-        exit(1);
+        exit(1);//kui tekib viga, lahkub programmist 
     }
-    printf("\nKasutaja on lisatud\n");
-    sprintf(b, "SELECT *FROM users WHERE number='%s'", num);
-    if (mysql_query(con, b)) {
+    printf("\nKasutaja on lisatud\n");//tagasiside kasutajale
+    sprintf(b, "SELECT *FROM users WHERE number='%s'", num);//lisab kokku MySQLi käsu sisestatud kasutaja valimiseks ja kasutaja sisestatud vastuse
+    if (mysql_query(con, b)) {//saadab käsu serverile
         fprintf(stderr, "%s\n", mysql_error(con));
-        exit(1);
+        exit(1);//kui tekib viga, lahkub programmist 
     }
-    res = mysql_use_result(con);
-    printf("Sisestatud kasutaja andmed: \n");
-    while ((row = mysql_fetch_row(res)) != NULL) {
-        printf("%s %s  %s  %s\n", row[0], row[1], row[2], row[3]);
+    res = mysql_use_result(con);//salvestab saadud tulemused
+    printf("Sisestatud kasutaja andmed: \n"); //näitab lisatud andmeid
+    while ((row = mysql_fetch_row(res)) != NULL) {//loop seni kaua kuni andmebaasist saadud vastel on ridu
+        printf("%s %s  %s  %s\n", row[0], row[1], row[2], row[3]);//väljastab tulemused
     }
-    mysql_free_result(res);
-    valimine(con, res, row, tegevus);
+    mysql_free_result(res);//vabastab tulemused
+    valimine(con, res, row, tegevus); //tagasi peamenüüsse
 }
 
 void uus_worker(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
     char name[300];
     char l[400];
     char a[400];
-    char *hx = "\0";
+    char *hx = "\0";//muutuja ülakoma eemaldamiseks
     printf("Sisestage uue töötaja nimi\n");
-    if (fgets(name, sizeof name, stdin)) {
-        char* newline = strchr(name, '\n');
+    if (fgets(name, sizeof name, stdin)) {//loeb kasutaja sisestust
+        char* newline = strchr(name, '\n');//otsib sisestuse läbi ning vaatab, kas selles on reavahetus 
         if (newline) {
-            *newline = 0;
+            *newline = 0;//kui reavahetus oli, siis kustutab selle
         }
     }
     int ix, jx, len;
-    len = strlen(name);
-    for (ix = 0; ix < len; ix++)
+    len = strlen(name);//kontrolli jaoks vastuse pikkus
+    for (ix = 0; ix < len; ix++)//loop ülakoma kontrolliks
     {
         if (name[ix] == '\'')
         {
-            name[ix] = *hx;
+            name[ix] = *hx;//kui ülakoma on, siis kustutab selle karakteri
             for (jx = ix; jx < len; jx++)
             {
-                name[jx] = name[jx + 1];
+                name[jx] = name[jx + 1];//järgmised karakterid liigutab ettepoole
             }
-            len--;
-            ix--;
+            len--;//vähendab vastuse pikkust
+            ix--;//vähendab kontrollmuutujat
         }
     }
-    sprintf(l, "INSERT INTO worker (workername) VALUES ('%s')", name);
-    if (mysql_query(con, l)) {
+    sprintf(l, "INSERT INTO worker (workername) VALUES ('%s')", name);//lisab kokku MySQLi käsu tabelisse nime lisamiseks ja kasutaja sisestatud vastuse
+    if (mysql_query(con, l)) {//saadab käsu serverile
         fprintf(stderr, "%s\n", mysql_error(con));
-        exit(1);
+        exit(1);//kui tekib viga, lahkub programmist 
     }
-    printf("\nTöötaja on lisatud\n");
-    sprintf(a, "SELECT *FROM worker WHERE workername='%s'", name);
-    if (mysql_query(con, a)) {
+    printf("\nTöötaja on lisatud\n"); //tagasiside kasutajale
+    sprintf(a, "SELECT *FROM worker WHERE workername='%s'", name);//lisab kokku MySQLi käsu lisatud töötaja valimiseks ja kasutaja sisestatud vastuse
+    if (mysql_query(con, a)) {//saadab käsu serverile
         fprintf(stderr, "%s\n", mysql_error(con));
-        exit(1);
+        exit(1);//kui tekib viga, lahkub programmist 
     }
-    res = mysql_use_result(con);
-    printf("Sisestatud töötaja andmed: \n");
-    while ((row = mysql_fetch_row(res)) != NULL) {
-        printf("%s %s \n", row[0], row[1]);
+    res = mysql_use_result(con);//salvestab saadud andmed
+    printf("Sisestatud töötaja andmed: \n"); //näitab sisesatud töötaja andmeid
+    while ((row = mysql_fetch_row(res)) != NULL) {//loop seni kaua kuni andmebaasist saadud vastel on ridu
+        printf("%s %s \n", row[0], row[1]);//näitab tulemuseid
     }
-    mysql_free_result(res);
-    valimine(con, res, row, tegevus);
+    mysql_free_result(res);//vabastab tulemuse muutuja
+    valimine(con, res, row, tegevus);//tagasi peamenüüsse
 
 }
 
@@ -2065,55 +2065,55 @@ void worker_muutmine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
     char nimi[200];
     char a[200];
     char b[300];
-    char *hx = "\0";
-    sprintf(a, "SELECT *FROM worker");
-    if (mysql_query(con, a)) {
+    char *hx = "\0";//muutuja ülakoma eemaldamiseks
+    sprintf(a, "SELECT *FROM worker"); //lisab kokku MySQLi käsu kõikide töötajate valimiseks ja kasutaja sisestatud vastuse
+    if (mysql_query(con, a)) {//saadab käsu serverile
         fprintf(stderr, "%s\n", mysql_error(con));
-        exit(1);
+        exit(1);//kui tekib viga, lahkub programmist 
     }
-    res = mysql_use_result(con);
-    printf("Kõik töötajad: \n");
-    while ((row = mysql_fetch_row(res)) != NULL) {
-        printf("%s %s \n", row[0], row[1]);
+    res = mysql_use_result(con);//salvestab saadud andmed
+    printf("Kõik töötajad: \n"); 
+    while ((row = mysql_fetch_row(res)) != NULL) {//loop seni kaua kuni andmebaasist saadud vastel on ridu
+        printf("%s %s \n", row[0], row[1]);//väljastab tulemused
     }
     printf("Sisestage töötaja id, kelle nime soovite muuta:\n");
-    if (fgets(e, sizeof e, stdin)) {
-        char* newline = strchr(e, '\n');
+    if (fgets(e, sizeof e, stdin)) {//loeb kasutaja sisestust
+        char* newline = strchr(e, '\n');//otsib sisestuse läbi ning vaatab, kas selles on reavahetus 
         if (newline) {
-            *newline = 0;
+            *newline = 0;//kui reavahetus oli, siis kustutab selle
         }
     }
     printf("Sisestage kasutaja uus nimi:\n");
-    if (fgets(nimi, sizeof nimi, stdin)) {
-        char* newline = strchr(nimi, '\n');
+    if (fgets(nimi, sizeof nimi, stdin)) {//loeb kasutaja sisestust
+        char* newline = strchr(nimi, '\n');//otsib sisestuse läbi ning vaatab, kas selles on reavahetus 
         if (newline) {
-            *newline = 0;
+            *newline = 0;//kui reavahetus oli, siis kustutab selle
         }
     }
     int ix, jx, len;
-    len = strlen(nimi);
-    for (ix = 0; ix < len; ix++)
+    len = strlen(nimi);//kontrolli jaoks vastuse pikkus
+    for (ix = 0; ix < len; ix++)//loop ülakoma kontrolliks
     {
         if (nimi[ix] == '\'')
         {
-            nimi[ix] = *hx;
+            nimi[ix] = *hx;//kui ülakoma on, siis kustutab selle karakteri
             for (jx = ix; jx < len; jx++)
             {
-                nimi[jx] = nimi[jx + 1];
+                nimi[jx] = nimi[jx + 1];//järgmised karakterid liigutab ettepoole
             }
-            len--;
-            ix--;
+            len--;//vähendab vastuse pikkust
+            ix--;//vähendab kontrollmuutujat
         }
     }
     int idnimi;
-    idnimi = atoi(e);
-    sprintf(b, "UPDATE worker SET workername='%s' WHERE idworker='%d'", nimi, idnimi);
-    if (mysql_query(con, b)) {
+    idnimi = atoi(e);//muudab vastuse numbriks
+    sprintf(b, "UPDATE worker SET workername='%s' WHERE idworker='%d'", nimi, idnimi);//lisab kokku MySQLi käsu töötajate andmete muutmiseks ja kasutaja sisestatud vastuse
+    if (mysql_query(con, b)) {//saadab käsu serverile
         fprintf(stderr, "%s\n", mysql_error(con));
-        exit(1);
+        exit(1);//kui tekib viga, lahkub programmist 
     }
-    printf("\nNimi on muudetud\n");
-    valimine(con, res, row, tegevus);
+    printf("\nNimi on muudetud\n"); //tagasiside kasutajale
+    valimine(con, res, row, tegevus); //tagasi peamenüüsse
 
 }
 
@@ -2264,68 +2264,66 @@ void kasutaja_muutmine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
 void worker_kustutamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
     char nim[300];
     char l[300];
-    char a[200];
-    sprintf(a, "SELECT *FROM worker");
-    if (mysql_query(con, a)) {
+    if (mysql_query(con, "SELECT *FROM worker")) {//saadab käsu kõikide töötajate valimiseks serverile
         fprintf(stderr, "%s\n", mysql_error(con));
-        exit(1);
+        exit(1);//kui tekib viga, lahkub programmist 
     }
-    res = mysql_use_result(con);
+    res = mysql_use_result(con);//salvestab valitud tulemused
     printf("Kõik töötajad: \n");
-    while ((row = mysql_fetch_row(res)) != NULL) {
-        printf("%s %s \n", row[0], row[1]);
+    while ((row = mysql_fetch_row(res)) != NULL) {//loop seni kaua kuni andmebaasist saadud vastel on ridu
+        printf("%s %s \n", row[0], row[1]);//väljastab tulemused
     }
     printf("Sisestage töötaja id, kelle andmeid soovite kustutada\n");
-    if (fgets(nim, sizeof nim, stdin)) {
-        char* newline = strchr(nim, '\n');
+    if (fgets(nim, sizeof nim, stdin)) {//loeb kasutaja sisestust
+        char* newline = strchr(nim, '\n');//otsib sisestuse läbi ning vaatab, kas selles on reavahetus 
         if (newline) {
-            *newline = 0;
+            *newline = 0;//kui reavahetus oli, siis kustutab selle
         }
     }
     int id;
-    id = atoi(nim);
-    sprintf(l, "DELETE FROM worker WHERE idworker = '%d'", id);
-    if (mysql_query(con, l)) {
+    id = atoi(nim);//muudab vastuse numbriks
+    sprintf(l, "DELETE FROM worker WHERE idworker = '%d'", id);//lisab kokku MySQLi käsu sisestatud id-ga töötaja kustutamiseks ja kasutaja sisestatud vastuse
+    if (mysql_query(con, l)) {//saadab käsu serverile
         fprintf(stderr, "%s\n", mysql_error(con));
-        exit(1);
+        exit(1);//kui tekib viga, lahkub programmist 
     }
-    printf("\nTöötaja on kustutatud\n");
-    valimine(con, res, row, tegevus);
+    printf("\nTöötaja on kustutatud\n");//tagasiside kasutajale
+    valimine(con, res, row, tegevus);//tagasi peamenüüsse
 }
 
 void kasutaja_kustutamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
     char nim[300];
     char l[300];
     printf("Sisestage kasutaja id, kelle andmeid soovite kustutada\n");
-    if (fgets(nim, sizeof nim, stdin)) {
-        char* newline = strchr(nim, '\n');
+    if (fgets(nim, sizeof nim, stdin)) {//loeb kasutaja sisestust
+        char* newline = strchr(nim, '\n');//otsib sisestuse läbi ning vaatab, kas selles on reavahetus 
         if (newline) {
-            *newline = 0;
+            *newline = 0;//kui reavahetus oli, siis kustutab selle
         }
     }
     int id;
-    id = atoi(nim);
-    sprintf(l, "DELETE FROM users WHERE idusers = '%d'", id);
-    if (mysql_query(con, l)) {
+    id = atoi(nim);//muudab vastuse numbriks
+    sprintf(l, "DELETE FROM users WHERE idusers = '%d'", id);//lisab kokku MySQLi käsu sisestatud id-ga kasutaja kustutamiseks ja kasutaja sisestatud vastuse
+    if (mysql_query(con, l)) {//saadab käsu serverile
         fprintf(stderr, "%s\n", mysql_error(con));
-        exit(1);
+        exit(1);//kui tekib viga, lahkub programmist 
     }
-    printf("\nKasutaja on kustutatud\n");
-    valimine(con, res, row, tegevus);
+    printf("\nKasutaja on kustutatud\n");//tagasiside kasutajale
+    valimine(con, res, row, tegevus);//tagasi peamenüüsse
 }
 
 void kasutajate_kuvamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
-    if (mysql_query(con, "SELECT * FROM users")) {
+    if (mysql_query(con, "SELECT * FROM users")) {//saadab käsu kõikide kasutajate valimiseks serverile
         fprintf(stderr, "%s\n", mysql_error(con));
-        exit(2);
+        exit(2);//kui tekib viga, lahkub programmist 
     }
-    res = mysql_use_result(con);
+    res = mysql_use_result(con);//salvestab valitud andmed
 
-    while ((row = mysql_fetch_row(res)) != NULL) {
-        printf("%s ----- %s\n", row[0], row[1]);
+    while ((row = mysql_fetch_row(res)) != NULL) {//loop seni kaua kuni andmebaasist saadud vastel on ridu
+        printf("%s ----- %s\n", row[0], row[1]);//väljastab tulemused
     }
-    mysql_free_result(res);
-    valimine(con, res, row, tegevus);
+    mysql_free_result(res);//vabastab tulemuse muutuja
+    valimine(con, res, row, tegevus);//tagasi peamenüüsse
 
 }
 
@@ -2655,63 +2653,61 @@ void raamatu_kustutamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus)
     char c[100];
     char d[100];
     char e[100];
-    char f[100];
 	int k = 0;
-    while (k == 0) {
-    sprintf(f, "SELECT *FROM raamatud");
-    if (mysql_query(con, f)) {
+    while (k == 0) {//tsükkel mitme raamatu kustutamiseks
+    if (mysql_query(con, "SELECT *FROM raamatud")) {//saadab serverile käsu kõikide raamatute valimiseks
         fprintf(stderr, "%s\n", mysql_error(con));
-        exit(1);
+        exit(1);//kui tekib viga, lahkub programmist 
     }
-    res = mysql_use_result(con);
-    while ((row = mysql_fetch_row(res)) != NULL) {
-        printf("%s %s\n", row[0], row[1]);
+    res = mysql_use_result(con);//salvestab valitud andmed
+    while ((row = mysql_fetch_row(res)) != NULL) {//loop seni kaua kuni andmebaasist saadud vastel on ridu
+        printf("%s %s\n", row[0], row[1]);//väljastab tulemused
     }
-    mysql_free_result(res);
+    mysql_free_result(res);//vabastab tulemuse muutuja
 
     printf("Sisestage raamatu id, mida soovite kustutada: \n");
-    if (fgets(b, sizeof b, stdin)) {
-        char* newline = strchr(b, '\n');
+    if (fgets(b, sizeof b, stdin)) {//loeb kasutaja sisestust
+        char* newline = strchr(b, '\n');//otsib sisestuse läbi ning vaatab, kas selles on reavahetus 
         if (newline) {
-            *newline = 0;
+            *newline = 0;//kui reavahetus oli, siis kustutab selle
         }
     }
     raamat_id = atoi(b);
-    sprintf(c, "DELETE FROM raamatud_has_autorid WHERE raamatud_id = '%d'", raamat_id);
-    sprintf(d, "DELETE FROM raamatud_has_sanrid WHERE raamatud_id = '%d'", raamat_id);
-    sprintf(e, "DELETE FROM koopia WHERE raamatud_id = '%d'", raamat_id);
-    sprintf(a, "DELETE FROM raamatud WHERE id = '%d'", raamat_id);
-    if (mysql_query(con, c)) {
+    sprintf(c, "DELETE FROM raamatud_has_autorid WHERE raamatud_id = '%d'", raamat_id);//lisab kokku MySQLi käsu andmete kustutamiseks ja kasutaja sisestatud id
+    sprintf(d, "DELETE FROM raamatud_has_sanrid WHERE raamatud_id = '%d'", raamat_id);//lisab kokku MySQLi käsu andmete kustutamiseks ja kasutaja sisestatud id
+    sprintf(e, "DELETE FROM koopia WHERE raamatud_id = '%d'", raamat_id);//lisab kokku MySQLi käsu raamatu koopiate kustutamiseks ja kasutaja sisestatud id
+    sprintf(a, "DELETE FROM raamatud WHERE id = '%d'", raamat_id);//lisab kokku MySQLi käsu raamatu kustutamiseks ja kasutaja sisestatud id
+    if (mysql_query(con, c)) {//saadab käsu serverile
         fprintf(stderr, "%s\n", mysql_error(con));
-        exit(1);
+        exit(1);//kui tekib viga, lahkub programmist 
     }
-    if (mysql_query(con, d)) {
+    if (mysql_query(con, d)) {//saadab käsu serverile
         fprintf(stderr, "%s\n", mysql_error(con));
-        exit(1);
+        exit(1);//kui tekib viga, lahkub programmist 
     }
-    if (mysql_query(con, e)) {
+    if (mysql_query(con, e)) {//saadab käsu serverile
         fprintf(stderr, "%s\n", mysql_error(con));
-        exit(1);
+        exit(1);//kui tekib viga, lahkub programmist 
     }
-    if (mysql_query(con, a)) {
+    if (mysql_query(con, a)) {//saadab käsu serverile
         fprintf(stderr, "%s\n", mysql_error(con));
-        exit(1);
+        exit(1);//kui tekib viga, lahkub programmist 
     }
 	char m[100];
     printf("Kas soovite kustutada veel ühe raamatu?\n");
         printf("-> 0 Jah\n");
         printf("-> 1 Ei\n");
-        if (fgets(m, sizeof m, stdin)) {
-            char* newline = strchr(m, '\n');
+        if (fgets(m, sizeof m, stdin)) {//loeb kasutaja sisestust
+            char* newline = strchr(m, '\n');//otsib sisestuse läbi ning vaatab, kas selles on reavahetus 
             if (newline) {
-                *newline = 0;
+                *newline = 0;//kui reavahetus oli, siis kustutab selle
             }
         }
-        k = atoi(m);
+        k = atoi(m);//muudab vastuse numbriks
 
     }
 
-    valimine(con, res, row, tegevus);
+    valimine(con, res, row, tegevus); //tagasi peamenüüsse
 }
 
 void autori_kustutamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
@@ -2719,52 +2715,50 @@ void autori_kustutamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) 
     char a[100];
     char b[10];
     char c[100];
-    char f[100];
 	int k = 0;
-    while (k == 0) {
-    sprintf(f, "SELECT *FROM autorid");
-    if (mysql_query(con, f)) {
+    while (k == 0) {//loop mitme autori kustutamiseks
+    if (mysql_query(con, "SELECT *FROM autorid")) {//saadab serverile käsu kõikide autorite valimiseks
         fprintf(stderr, "%s\n", mysql_error(con));
-        exit(1);
+        exit(1);//kui tekib viga, lahkub programmist 
     }
-    res = mysql_use_result(con);
-    while ((row = mysql_fetch_row(res)) != NULL) {
-        printf("%s %s\n", row[0], row[1]);
+    res = mysql_use_result(con); //salvestab tulemused
+    while ((row = mysql_fetch_row(res)) != NULL) {//loop seni kaua kuni andmebaasist saadud vastel on ridu
+        printf("%s %s\n", row[0], row[1]);//väljastab valitud tulemused
     }
-    mysql_free_result(res);
+    mysql_free_result(res); //vabastab tulemuse muutuja
     printf("Sisestage autori id, mida soovite kustutada: \n");
-    if (fgets(b, sizeof b, stdin)) {
-        char* newline = strchr(b, '\n');
+    if (fgets(b, sizeof b, stdin)) {//loeb kasutaja sisestust
+        char* newline = strchr(b, '\n');//otsib sisestuse läbi ning vaatab, kas selles on reavahetus 
         if (newline) {
-            *newline = 0;
+            *newline = 0;//kui reavahetus oli, siis kustutab selle
         }
     }
-    autor_id = atoi(b);
+    autor_id = atoi(b); //muudab sisestatud id numbriks
     sprintf(a, "DELETE FROM autorid WHERE id = '%d'", autor_id);
     sprintf(c, "DELETE FROM raamatud_has_autorid WHERE autorid_id = '%d'", autor_id);
-    if (mysql_query(con, c)) {
+    if (mysql_query(con, c)) {//saadab käsu serverile
         fprintf(stderr, "%s\n", mysql_error(con));
-        exit(1);
+        exit(1);//kui tekib viga, lahkub programmist 
     }
-    if (mysql_query(con, a)) {
+    if (mysql_query(con, a)) {//saadab käsu serverile
         fprintf(stderr, "%s\n", mysql_error(con));
-        exit(1);
+        exit(1);//kui tekib viga, lahkub programmist 
     }
 	char m[100];
     printf("Kas soovite kustutada veel ühe autori?\n");
         printf("-> 0 Jah\n");
         printf("-> 1 Ei\n");
-        if (fgets(m, sizeof m, stdin)) {
-            char* newline = strchr(m, '\n');
+        if (fgets(m, sizeof m, stdin)) {//loeb kasutaja sisestust
+            char* newline = strchr(m, '\n');//otsib sisestuse läbi ning vaatab, kas selles on reavahetus 
             if (newline) {
-                *newline = 0;
+                *newline = 0;//kui reavahetus oli, siis kustutab selle
             }
         }
-        k = atoi(m);
+        k = atoi(m);//muudab sisestatud vastuse numbriks
 
     }
 
-    valimine(con, res, row, tegevus);
+    valimine(con, res, row, tegevus);//tagasi peamenüüsse
 
 }
 
@@ -2775,52 +2769,52 @@ void zanri_kustutamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
     char b[10];
     char f[100];
 	int k = 0;
-    while (k == 0) {
+    while (k == 0) { //loop mitme žanri kustutamiseks
     printf("Sisestage zanri id: \n");
-    if (fgets(b, sizeof b, stdin)) {
-        char* newline = strchr(b, '\n');
+    if (fgets(b, sizeof b, stdin)) {//loeb kasutaja sisestust
+        char* newline = strchr(b, '\n');//otsib sisestuse läbi ning vaatab, kas selles on reavahetus 
         if (newline) {
-            *newline = 0;
+            *newline = 0;//kui reavahetus oli, siis kustutab selle
         }
     }
-    zanr_id = atoi(b);
-    sprintf(f, "SELECT * FROM sanrid WHERE id = '%d'", zanr_id);
+    zanr_id = atoi(b); //muudab sisestatud id numbriks
+    sprintf(f, "SELECT * FROM sanrid WHERE id = '%d'", zanr_id); //lisab kokku MySQLi käsu sisestatud id-ga žanri valimiseks ja kasutaja sisestatud vastuse
     if (mysql_query(con, f)) {
         fprintf(stderr, "%s\n", mysql_error(con));
         exit(1);
     }
-    res = mysql_use_result(con);
+    res = mysql_use_result(con);//salvestab saadud tulemused
     if(res == NULL){
         printf("Žanri pole andmebaasis!\n");
         zanri_kustutamine(con, res, row, tegevus);
     }
-    mysql_free_result(res);
-    sprintf(a, "DELETE FROM sanrid WHERE id = '%d'", zanr_id);
-    sprintf(c, "DELETE FROM raamatud_has_sanrid WHERE sanrid_id = '%d'", zanr_id);
-    if (mysql_query(con, c)) {
+    mysql_free_result(res);//vabastab tulemuse muutuja
+    sprintf(a, "DELETE FROM sanrid WHERE id = '%d'", zanr_id);//lisab kokku MySQLi käsu sisestatud id-ga žanri kustutamiseks ja kasutaja sisestatud vastuse
+    sprintf(c, "DELETE FROM raamatud_has_sanrid WHERE sanrid_id = '%d'", zanr_id);//lisab kokku MySQLi käsu kustutamiseks ja kasutaja sisestatud vastuse
+    if (mysql_query(con, c)) {//saadab käsu serverile
         fprintf(stderr, "%s\n", mysql_error(con));
-        exit(1);
+        exit(1);//kui tekib viga, lahkub programmist 
     }
-    if (mysql_query(con, a)) {
+    if (mysql_query(con, a)) {//saadab käsu serverile
         fprintf(stderr, "%s\n", mysql_error(con));
-        exit(1);
+        exit(1);//kui tekib viga, lahkub programmist 
     }
 	char m[100];
     printf("Kas soovite kustutada veel ühe žanri?\n");
         printf("-> 0 Jah\n");
         printf("-> 1 Ei\n");
-        if (fgets(m, sizeof m, stdin)) {
-            char* newline = strchr(m, '\n');
+        if (fgets(m, sizeof m, stdin)) {//loeb kasutaja sisestust
+            char* newline = strchr(m, '\n');//otsib sisestuse läbi ning vaatab, kas selles on reavahetus 
             if (newline) {
-                *newline = 0;
+                *newline = 0;//kui reavahetus oli, siis kustutab selle
             }
         }
-        k = atoi(m);
+        k = atoi(m); //muudab vastuse numbriks
 
     }
 
 
-    valimine(con, res, row, tegevus);
+    valimine(con, res, row, tegevus);//tagasi peamenüüsse
 }
 
 void kohaviida_kustutamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
@@ -2829,52 +2823,52 @@ void kohaviida_kustutamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevu
     char b[10];
     char c[100];
 	int k = 0;
-    while (k == 0) {
+    while (k == 0) {//loop mitme kohaviida kustutamiseks
     printf("Sisestage kohaviida id, mille soovite kustutada: \n");
-    if (fgets(b, sizeof b, stdin)) {
-        char* newline = strchr(b, '\n');
+    if (fgets(b, sizeof b, stdin)) {//loeb kasutaja sisestust
+        char* newline = strchr(b, '\n');//otsib sisestuse läbi ning vaatab, kas selles on reavahetus 
         if (newline) {
-            *newline = 0;
+            *newline = 0;//kui reavahetus oli, siis kustutab selle
         }
     }
-    kohaviit_id = atoi(b);
+    kohaviit_id = atoi(b); //muudab sisestatud id numbriks
     char d[100];
-    sprintf(d, "SELECT * FROM kohaviit WHERE id = '%d'", kohaviit_id);
-    if (mysql_query(con, d)) {
+    sprintf(d, "SELECT * FROM kohaviit WHERE id = '%d'", kohaviit_id);//lisab kokku MySQLi käsu sisestatud id-ga kohaviida valimiseks ja kasutaja sisestatud vastuse
+    if (mysql_query(con, d)) {//saadab käsu serverile
         fprintf(stderr, "%s\n", mysql_error(con));
-        exit(1);
+        exit(1);//kui tekib viga, lahkub programmist 
     }
-    res = mysql_use_result(con);
-    if(res == NULL){
-        printf("Kohaviita pole andmebaasis!\n");
-        kohaviida_kustutamine(con, res, row, tegevus);
+    res = mysql_use_result(con); //salvestab tulemused
+    if(res == NULL){ //kontrollib kas saadi mingi vastus
+        printf("Kohaviita pole andmebaasis!\n");//tagasiside
+        kohaviida_kustutamine(con, res, row, tegevus);//alusatb uuesti kustutamisega
     }
-    mysql_free_result(res);
-    sprintf(a, "DELETE FROM kohaviit WHERE id = '%d'", kohaviit_id);
-    sprintf(c, "DELETE FROM koopia WHERE kohaviit_id = '%d'", kohaviit_id);
-    if (mysql_query(con, c)) {
+    mysql_free_result(res);//vabastab tulemuse muutuja
+    sprintf(a, "DELETE FROM kohaviit WHERE id = '%d'", kohaviit_id);//lisab kokku MySQLi käsu kohaviida kustutamiseks ja kasutaja sisestatud vastuse
+    sprintf(c, "DELETE FROM koopia WHERE kohaviit_id = '%d'", kohaviit_id); //lisab kokku MySQLi käsu sellise kohaviidaga koopiate kustutamiseks ja kasutaja sisestatud vastuse
+    if (mysql_query(con, c)) {//saadab käsu serverile
         fprintf(stderr, "%s\n", mysql_error(con));
-        exit(1);
+        exit(1);//kui tekib viga, lahkub programmist 
     }
-    if (mysql_query(con, a)) {
+    if (mysql_query(con, a)) {//saadab käsu serverile
         fprintf(stderr, "%s\n", mysql_error(con));
-        exit(1);
+        exit(1);//kui tekib viga, lahkub programmist 
     }
 	char m[100];
     printf("Kas soovite kustutada veel ühe kohaviida?\n");
         printf("-> 0 Jah\n");
         printf("-> 1 Ei\n");
-        if (fgets(m, sizeof m, stdin)) {
-            char* newline = strchr(m, '\n');
+        if (fgets(m, sizeof m, stdin)) {//loeb kasutaja sisestust
+            char* newline = strchr(m, '\n');//otsib sisestuse läbi ning vaatab, kas selles on reavahetus 
             if (newline) {
-                *newline = 0;
+                *newline = 0;//kui reavahetus oli, siis kustutab selle
             }
         }
-        k = atoi(m);
+        k = atoi(m); //muudab vastuse numbriks
 
     }
 
-    valimine(con, res, row, tegevus);
+    valimine(con, res, row, tegevus);//tagasi peamenüüsse
 }
 
 void koopia_kustutamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
@@ -2882,45 +2876,45 @@ void koopia_kustutamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) 
     char a[100];
     char b[10];
 	int k = 0;
-    while (k == 0) {
+    while (k == 0) {//loop mitme koopia kustutamiseks
     printf("Sisestage koopia id: \n");
-    if (fgets(b, sizeof b, stdin)) {
-        char* newline = strchr(b, '\n');
+    if (fgets(b, sizeof b, stdin)) {//loeb kasutaja sisestust
+        char* newline = strchr(b, '\n');//otsib sisestuse läbi ning vaatab, kas selles on reavahetus 
         if (newline) {
-            *newline = 0;
+            *newline = 0;//kui reavahetus oli, siis kustutab selle
         }
     }
-    koopia_id = atoi(b);
+    koopia_id = atoi(b);//muudab sisestatud id numbriks
     char c[100];
-    sprintf(c, "SELECT * FROM koopia WHERE idkoopia = '%d'", koopia_id);
-    if (mysql_query(con, c)) {
+    sprintf(c, "SELECT * FROM koopia WHERE idkoopia = '%d'", koopia_id);//lisab kokku MySQLi käsu sisestatud id-ga koopia valimiseks ja kasutaja sisestatud vastuse
+    if (mysql_query(con, c)) {//saadab käsu serverile
         fprintf(stderr, "%s\n", mysql_error(con));
-        exit(1);
+        exit(1);//kui tekib viga, lahkub programmist 
     }
-    res = mysql_use_result(con);
-    if(res == NULL){
-        printf("Koopiat pole andmebaasis!\n");
-        koopia_kustutamine(con, res, row, tegevus);
+    res = mysql_use_result(con); //salvestab saadud tulemused
+    if(res == NULL){//kontrollib kas ikka saadi mingi tulemus
+        printf("Koopiat pole andmebaasis!\n");//tagasiside
+        koopia_kustutamine(con, res, row, tegevus);//alustatakse koopia kustutamisega uuesti
     }
-    mysql_free_result(res);
-    sprintf(a, "DELETE FROM koopia WHERE idkoopia = '%d'", koopia_id);
-    if (mysql_query(con, a)) {
+    mysql_free_result(res);//vabastatakse tulemuse muutuja
+    sprintf(a, "DELETE FROM koopia WHERE idkoopia = '%d'", koopia_id);//lisab kokku MySQLi käsu sisestatud id-ga koopia kustutamiseks ja kasutaja sisestatud vastuse
+    if (mysql_query(con, a)) {//saadab käsu serverile
         fprintf(stderr, "%s\n", mysql_error(con));
-        exit(1);
+        exit(1);//kui tekib viga, lahkub programmist 
     }
 	char m[100];
     printf("Kas soovite kustutada veel ühe koopia?\n");
         printf("-> 0 Jah\n");
         printf("-> 1 Ei\n");
-        if (fgets(m, sizeof m, stdin)) {
-            char* newline = strchr(m, '\n');
+        if (fgets(m, sizeof m, stdin)) {//loeb kasutaja sisestust
+            char* newline = strchr(m, '\n');//otsib sisestuse läbi ning vaatab, kas selles on reavahetus 
             if (newline) {
-                *newline = 0;
+                *newline = 0;//kui reavahetus oli, siis kustutab selle
             }
         }
-        k = atoi(m);
+        k = atoi(m);//muudab vastuse numbriks
 
     }
 
-    valimine(con, res, row, tegevus);
+    valimine(con, res, row, tegevus);//tagasi peamenüüsse
 }
