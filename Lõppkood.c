@@ -201,7 +201,7 @@ void lisamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
                                     fprintf(stderr, "%s\n", mysql_error(con));
                                     exit(1);//kui tekib viga, lahkub programmist 
                                 }
-                                break;
+                                break;//lahkub switchist
                             case 2: //kasutaja valis uue žanri lisamise
                                 printf("Sisestage žanri nimi:\n");//küsib kasutaja sisestust
                                 if (fgets(g, sizeof g, stdin)) {//loeb kasutaja sisestust
@@ -237,7 +237,7 @@ void lisamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
                                         exit(1);//kui tekib viga, lahkub programmist 
                                     }
                                 }
-                                break;
+                                break;//lahkub switchist
                             }
 
                         }
@@ -255,10 +255,10 @@ void lisamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
                     }
                     u = atoi(l);//muudab vastuse numbriks
                 }
-                break;
+                break;//lahkub switchist
             case 2://kasutaja ei soovinud lisada žanrit
                 valimine(con, res, row, tegevus); //läheb tagasi valimise juurde
-                break;
+                break;//lahkub switchist
             }
         }
 
@@ -334,7 +334,7 @@ void lisamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
                                     fprintf(stderr, "%s\n", mysql_error(con));
                                     exit(1);//kui tekib viga, lahkub programmist 
                                 }
-                                break;
+                                break;//lahkub switchist
                             case 2: //kasutaja valis uue autori lisamise
                                 printf("Sisestage autori nimi:\n");
                                 if (fgets(g, sizeof g, stdin)) {//loeb kasutaja sisestust
@@ -370,7 +370,7 @@ void lisamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
                                         exit(1);//kui tekib viga, lahkub programmist 
                                     }
                                 }
-                                break;
+                                break;//lahkub switchist
                             }
 
                         }
@@ -388,10 +388,10 @@ void lisamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
                     }
                     k = atoi(y); //muudab vastuse numbriks
                 }
-                break;
+                break;//lahkub switchist
             case 2: //kasutaja ei soovi lisada autorit
                 valimine(con, res, row, tegevus); //tagasi valimise menüüsse
-                break;
+                break;//lahkub switchist
             }
         }
 
@@ -535,10 +535,10 @@ void lisamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
                 n = atoi(m);//muudab vastuse numbriks
 
             }
-            break;
+            break;//lahkub switchist
         case 2: //kasutaja ei soovi lisada koopiat
             valimine(con, res, row, tegevus); //tagasi valimise menüüsse
-            break;
+            break;//lahkub switchist
         }
     } while (vali < 0 && vali > 2);
 	char m[100];
@@ -787,7 +787,7 @@ void raamatule_autor(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
                         fprintf(stderr, "%s\n", mysql_error(con));
                         exit(1);//kui tekib viga, lahkub programmist 
                     }
-                    break;
+                    break;//lahkub switchist
                 case 2:
                     tegevusstr = "uue autori lisamine";
                     printf("\n----- Valisite tegevuse %s -----\n", tegevusstr);
@@ -842,7 +842,7 @@ void raamatule_autor(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
                         fprintf(stderr, "%s\n", mysql_error(con));
                         exit(1);//kui tekib viga, lahkub programmist 
                     }
-                    break;
+                    break;//lahkub switchist
                 }
 
             }
@@ -943,7 +943,7 @@ void raamatule_zanr(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
                         fprintf(stderr, "%s\n", mysql_error(con));
                         exit(1);//kui tekib viga, lahkub programmist 
                     }
-                    break;
+                    break;//lahkub switchist
                 case 2:
                     tegevusstr = "uue žanri lisamine";
                     printf("\n----- Valisite tegevuse %s -----\n", tegevusstr);
@@ -991,7 +991,7 @@ void raamatule_zanr(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
                         fprintf(stderr, "%s\n", mysql_error(con));
                         exit(1);//kui tekib viga, lahkub programmist 
                     }
-                    break;
+                    break;//lahkub switchist
                 }
 
             }   
@@ -1320,7 +1320,7 @@ void koopia_kuvamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus){
                     }
                     mysql_free_result(res);//vabastab tulemused
                     valimine(con, res, row, tegevus);//tagasi valimise menüüsse
-                    break;
+                    break;//lahkub switchist
                 case 2://kui valitakse teine tegevus
                     if (mysql_query(con, "SELECT * FROM koopia WHERE laenutatud_id IS NOT NULL")) {//saadab käsu laenutatud koopiate valimiseks serverile
                         fprintf(stderr, "%s\n", mysql_error(con));
@@ -1333,7 +1333,7 @@ void koopia_kuvamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus){
                     }
                     mysql_free_result(res);//vabastab tulemused
                     valimine(con, res, row, tegevus); //tagasi valimise menüüsse
-                    break;
+                    break;//lahkub switchist
             }
         }
     }while(tegevus11 < 0 || tegevus11 > 3);
@@ -2123,142 +2123,142 @@ void kasutaja_muutmine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
     char a[10];
     char nimi[300];
     int tegevus2;
-    char *hx = "\0";
+    char *hx = "\0";//muutuja ülakoma eemaldamiseks
     printf("Mida soovite muuta? (Valige tegevusele vastav number)\n");
     printf("-> 1 Kasutaja nime\n");
     printf("-> 2 Kasutaja aadressi\n");
     printf("-> 3 Kasutaja telefoni numbrit\n");
 
-    do {
-        if (fgets(a, sizeof a, stdin)) {
-            char* newline = strchr(a, '\n');
+    do {//loop tegevuse valimise jaoks, kordab seni kaua kui kasutaja valib ühe ette antud tegevustest
+        if (fgets(a, sizeof a, stdin)) {//loeb kasutaja sisestust
+            char* newline = strchr(a, '\n');//otsib sisestuse läbi ning vaatab, kas selles on reavahetus 
             if (newline) {
-                *newline = 0;
+                *newline = 0;//kui reavahetus oli, siis kustutab selle
             }
         }
-        tegevus2 = atoi(a);
+        tegevus2 = atoi(a); //muudab kasutaja poolt sisestatud vastuse numbriks
         switch (tegevus2) {
-        case 1:
+        case 1://kui kasutaja valib nime muutmise
             printf("Sisestage kasutaja id, kelle nime soovite muuta:\n");
-            if (fgets(e, sizeof e, stdin)) {
-                char* newline = strchr(e, '\n');
+            if (fgets(e, sizeof e, stdin)) {//loeb kasutaja sisestust
+                char* newline = strchr(e, '\n');//otsib sisestuse läbi ning vaatab, kas selles on reavahetus 
                 if (newline) {
-                    *newline = 0;
+                    *newline = 0;//kui reavahetus oli, siis kustutab selle
                 }
             }
             printf("Sisestage kasutaja uus nimi:\n");
-            if (fgets(nimi, sizeof nimi, stdin)) {
-                char* newline = strchr(nimi, '\n');
+            if (fgets(nimi, sizeof nimi, stdin)) {//loeb kasutaja sisestust
+                char* newline = strchr(nimi, '\n');//otsib sisestuse läbi ning vaatab, kas selles on reavahetus 
                 if (newline) {
-                    *newline = 0;
+                    *newline = 0;//kui reavahetus oli, siis kustutab selle
                 }
             }
             int ix, jx, len;
-            len = strlen(nimi);
-            for (ix = 0; ix < len; ix++)
+            len = strlen(nimi);//kontrolli jaoks vastuse pikkus
+            for (ix = 0; ix < len; ix++)//loop ülakoma kontrolliks
             {
                 if (nimi[ix] == '\'')
                 {
-                    nimi[ix] = *hx;
+                    nimi[ix] = *hx;//kui ülakoma on, siis kustutab selle karakteri
                     for (jx = ix; jx < len; jx++)
                     {
-                        nimi[jx] = nimi[jx + 1];
+                        nimi[jx] = nimi[jx + 1];//järgmised karakterid liigutab ettepoole
                     }
-                    len--;
-                    ix--;
+                    len--;//vähendab vastuse pikkust
+                    ix--;//vähendab kontrollmuutujat
                 }
             }
             int idnimi;
-            idnimi = atoi(e);
-            sprintf(b, "UPDATE users SET nimi='%s' WHERE idusers='%d'", nimi, idnimi);
-            if (mysql_query(con, b)) {
+            idnimi = atoi(e);//muudab vastuse numbriks
+            sprintf(b, "UPDATE users SET nimi='%s' WHERE idusers='%d'", nimi, idnimi);//lisab kokku MySQLi käsu tabelis andmete muutmiseks ja kasutaja sisestatud vastuse
+            if (mysql_query(con, b)) {//saadab käsu serverile
                 fprintf(stderr, "%s\n", mysql_error(con));
-                exit(1);
+                exit(1);//kui tekib viga, lahkub programmist 
             }
             printf("\nNimi on muudetud\n");
-            break;
+            break;//lahkub switchist
         case 2:
             printf("Sisestage kasutaja id, kelle aadressit soovite muuta:\n");
-            if (fgets(e, sizeof e, stdin)) {
-                char* newline = strchr(e, '\n');
+            if (fgets(e, sizeof e, stdin)) {//loeb kasutaja sisestust
+                char* newline = strchr(e, '\n');//otsib sisestuse läbi ning vaatab, kas selles on reavahetus 
                 if (newline) {
-                    *newline = 0;
+                    *newline = 0;//kui reavahetus oli, siis kustutab selle
                 }
             }
             printf("Sisestage kasutaja uus aadress:\n");
-            if (fgets(nimi, sizeof nimi, stdin)) {
-                char* newline = strchr(nimi, '\n');
+            if (fgets(nimi, sizeof nimi, stdin)) {//loeb kasutaja sisestust
+                char* newline = strchr(nimi, '\n');//otsib sisestuse läbi ning vaatab, kas selles on reavahetus 
                 if (newline) {
-                    *newline = 0;
+                    *newline = 0;//kui reavahetus oli, siis kustutab selle
                 }
             }
 
-            len = strlen(nimi);
-            for (ix = 0; ix < len; ix++)
+            len = strlen(nimi);//kontrolli jaoks vastuse pikkus
+            for (ix = 0; ix < len; ix++)//loop ülakoma kontrolliks
             {
                 if (nimi[ix] == '\'')
                 {
-                    nimi[ix] = *hx;
+                    nimi[ix] = *hx;//kui ülakoma on, siis kustutab selle karakteri
                     for (jx = ix; jx < len; jx++)
                     {
-                        nimi[jx] = nimi[jx + 1];
+                        nimi[jx] = nimi[jx + 1];//järgmised karakterid liigutab ettepoole
                     }
-                    len--;
-                    ix--;
+                    len--;//vähendab vastuse pikkust
+                    ix--;//vähendab kontrollmuutujat
                 }
             }
             int idnimi2;
-            idnimi2 = atoi(e);
-            sprintf(b, "UPDATE users SET aadress='%s' WHERE idusers='%d'", nimi, idnimi2);
-            if (mysql_query(con, b)) {
+            idnimi2 = atoi(e);//muudab vastuse numbriks
+            sprintf(b, "UPDATE users SET aadress='%s' WHERE idusers='%d'", nimi, idnimi2);//lisab kokku MySQLi käsu tabelis andmete muutmiseks ja kasutaja sisestatud vastuse
+            if (mysql_query(con, b)) {//saadab käsu serverile
                 fprintf(stderr, "%s\n", mysql_error(con));
-                exit(1);
+                exit(1);//kui tekib viga, lahkub programmist 
             }
             printf("\nAadress on muudetud\n");
-            break;
+            break;//lahkub switchist
         case 3:
             printf("Sisestage kasutaja id, kelle telefoni numbrit soovite muuta:\n");
-            if (fgets(e, sizeof e, stdin)) {
-                char* newline = strchr(e, '\n');
+            if (fgets(e, sizeof e, stdin)) {//loeb kasutaja sisestust
+                char* newline = strchr(e, '\n');//otsib sisestuse läbi ning vaatab, kas selles on reavahetus 
                 if (newline) {
-                    *newline = 0;
+                    *newline = 0;//kui reavahetus oli, siis kustutab selle
                 }
             }
             printf("Sisestage kasutaja uus number:\n");
-            if (fgets(nimi, sizeof nimi, stdin)) {
-                char* newline = strchr(nimi, '\n');
+            if (fgets(nimi, sizeof nimi, stdin)) {//loeb kasutaja sisestust
+                char* newline = strchr(nimi, '\n');//otsib sisestuse läbi ning vaatab, kas selles on reavahetus 
                 if (newline) {
-                    *newline = 0;
+                    *newline = 0;//kui reavahetus oli, siis kustutab selle
                 }
             }
-            len = strlen(nimi);
-            for (ix = 0; ix < len; ix++)
+            len = strlen(nimi);//kontrolli jaoks vastuse pikkus
+            for (ix = 0; ix < len; ix++)//loop ülakoma kontrolliks
             {
                 if (nimi[ix] == '\'')
                 {
-                    nimi[ix] = *hx;
+                    nimi[ix] = *hx;//kui ülakoma on, siis kustutab selle karakteri
                     for (jx = ix; jx < len; jx++)
                     {
-                        nimi[jx] = nimi[jx + 1];
+                        nimi[jx] = nimi[jx + 1];//järgmised karakterid liigutab ettepoole
                     }
-                    len--;
-                    ix--;
+                    len--;//vähendab vastuse pikkust
+                    ix--;//vähendab kontrollmuutujat
                 }
             }
             int idnimi3;
-            idnimi3 = atoi(e);
-            sprintf(b, "UPDATE users SET number='%s' WHERE idusers='%d'", nimi, idnimi3);
-            if (mysql_query(con, b)) {
+            idnimi3 = atoi(e);//muudab vastuse numbriks
+            sprintf(b, "UPDATE users SET number='%s' WHERE idusers='%d'", nimi, idnimi3);//lisab kokku MySQLi käsu tabelis andmete muutmiseks ja kasutaja sisestatud vastuse
+            if (mysql_query(con, b)) {//saadab käsu serverile
                 fprintf(stderr, "%s\n", mysql_error(con));
-                exit(1);
+                exit(1);//kui tekib viga, lahkub programmist 
             }
             printf("\nNumber on muudetud\n");
-            break;
+            break;//lahkub switchist
 
         }
-    } while (tegevus2 > 0 && tegevus2 < 9);
+    } while (tegevus2 > 0 && tegevus2 < 4);//sisestatud number peab olema 1-3
 
-    valimine(con, res, row, tegevus);
+    valimine(con, res, row, tegevus);//tagasi peamenüüsse
 }
 
 void worker_kustutamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
@@ -2342,18 +2342,18 @@ int valimine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
     printf("-> 7 Kustutamine\n");
     printf("-> 8 Muuda olemasolevat sissekannet\n");
     printf("-> 9 Lahku programmist\n");
-    do {
-        if (fgets(b, sizeof b, stdin)) {
-            char* newline = strchr(b, '\n');
+    do {//tsükkel tegevuse valimiseks nii kaua kui kasutaja sisestab 
+        if (fgets(b, sizeof b, stdin)) {//loeb kasutaja sisestust
+            char* newline = strchr(b, '\n');//otsib sisestuse läbi ning vaatab, kas selles on reavahetus 
             if (newline) {
-                *newline = 0;
+                *newline = 0;//kui reavahetus oli, siis kustutab selle
             }
         }
-        tegevus = atoi(b);
-        if (tegevus > 0 && tegevus < 10)
+        tegevus = atoi(b);//muudab vastuse numbriks
+        if (tegevus > 0 && tegevus < 10)//sisestatud vastus peab olema 1-9
         {
             switch (tegevus) {
-                char* tegevusstr;
+                char* tegevusstr;//muutuja valitud tegevuse kuvamiseks
             case 1:
                 tegevusstr = "Kuvamine";
                 printf("\n----- Valisite tegevuse %s -----\n", tegevusstr);
@@ -2365,34 +2365,34 @@ int valimine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
                 printf("-> 5 Koopiaid\n");
                 int tegevus10;
 
-                do {
-                    if (fgets(a, sizeof a, stdin)) {
-                        char* newline = strchr(a, '\n');
+                do {//tsükkel seni kuni kasutaja sisestab aksepteeritava vastuse
+                    if (fgets(a, sizeof a, stdin)) {//loeb kasutaja sisestust
+                        char* newline = strchr(a, '\n');//otsib sisestuse läbi ning vaatab, kas selles on reavahetus 
                         if (newline) {
-                            *newline = 0;
+                            *newline = 0;//kui reavahetus oli, siis kustutab selle
                         }
                     }
-                    tegevus10 = atoi(a);
+                    tegevus10 = atoi(a);//muudab sisestuse numbriks
                     switch (tegevus10) {
                     case 1:
-                        kuvamine(con, res, row, tegevus);
-                        break;
+                        kuvamine(con, res, row, tegevus);//raamatute kuvamise funktsioon
+                        break;//lahkub switchist
                     case 2:
-                        autori_kuvamine(con, res, row, tegevus);
-                        break;
+                        autori_kuvamine(con, res, row, tegevus);//autorite kuvamise funktsioon
+                        break;//lahkub switchist
                     case 3:
-                        zanri_kuvamine(con, res, row, tegevus);
-                        break;
+                        zanri_kuvamine(con, res, row, tegevus);//žanrite kuvamise funktsioon
+                        break;//lahkub switchist
 
                     case 4:
-                        kasutajate_kuvamine(con, res, row, tegevus);
-                        break;
+                        kasutajate_kuvamine(con, res, row, tegevus);//kasutajate kuvamise funktsioon
+                        break;//lahkub switchist
                     case 5:
-                        koopia_kuvamine(con, res, row, tegevus);
-                        break;
+                        koopia_kuvamine(con, res, row, tegevus);//koopiate kuvamise funktsioon
+                        break;//lahkub switchist
                     }
-                } while (tegevus10 > 0 && tegevus10 < 6);
-                break;
+                } while (tegevus10 > 0 && tegevus10 < 6);//valitud tegevus peab olema 1-5
+                break;//lahkub switchist
 
             case 2:
                 tegevusstr = "lisamine";
@@ -2409,79 +2409,76 @@ int valimine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
                 printf("-> 8 Uus kasutaja\n");
                 printf("-> 9 Uus töötaja\n");
                 printf("-> 10 Lahkumine\n");
-                do {
-                    if (fgets(a, sizeof a, stdin)) {
-                        char* newline = strchr(a, '\n');
+                do {//loop seni kaua kui kasutaja sisestab vastuse vahemikus 1-10
+                    if (fgets(a, sizeof a, stdin)) {//loeb kasutaja sisestust
+                        char* newline = strchr(a, '\n');//otsib sisestuse läbi ning vaatab, kas selles on reavahetus 
                         if (newline) {
-                            *newline = 0;
+                            *newline = 0;//kui reavahetus oli, siis kustutab selle
                         }
                     }
-                    tegevus2 = atoi(a);
+                    tegevus2 = atoi(a);//muudab sisestuse numbriks
                     switch (tegevus2) {
                     case 1:
                         printf("Andmebaasis olevad raamatud\n");
-                        sprintf(f, "SELECT *FROM raamatud");
-                        if (mysql_query(con, f)) {
+                        if (mysql_query(con, "SELECT *FROM raamatud")) {//saadab serverile käsu valida andmebaasist kõik raamatute andmed
                             fprintf(stderr, "%s\n", mysql_error(con));
-                            exit(1);
+                            exit(1);//kui tekib viga, lahkub programmist 
                         }
-                        res = mysql_use_result(con);
-                        while ((row = mysql_fetch_row(res)) != NULL) {
-                            printf("%s %s\n", row[0], row[1]);
+                        res = mysql_use_result(con);//salvestab saadud tulemused
+                        while ((row = mysql_fetch_row(res)) != NULL) {//loop seni kaua kui vastuses on ridu
+                            printf("%s %s\n", row[0], row[1]);//väljastab tulemused
                         }
-                        mysql_free_result(res);
-                        lisamine(con, res, row, tegevus);
-                        break;
+                        mysql_free_result(res);//vabastab tulemuse muutuja
+                        lisamine(con, res, row, tegevus);//tagasi lisamise menüüsse
+                        break;//lahkub switchist
                     case 2:
-                        char f[100];
 		                printf("Autorid ja nende id-d:\n");
-                        sprintf(f, "SELECT *FROM autorid");
-                        if (mysql_query(con, f)) {
+                        if (mysql_query(con, "SELECT *FROM autorid")) {//saadab serverile käsu valida andmebaasist kõik autorite andmed
                             fprintf(stderr, "%s\n", mysql_error(con));
-                            exit(1);
+                            exit(1);//kui tekib viga, lahkub programmist 
                         }
-                        res = mysql_use_result(con);
-                        while ((row = mysql_fetch_row(res)) != NULL) {
-                            printf("%s %s\n", row[0], row[1]);
+                        res = mysql_use_result(con);//salvestab saadud tulemused
+                        while ((row = mysql_fetch_row(res)) != NULL) {//loop seni kaua kui vastuses on ridu
+                            printf("%s %s\n", row[0], row[1]);//väljastab tulemused
                         }
-                        autori_lisamine(con, res, row, tegevus);
-                        break;
+                        autori_lisamine(con, res, row, tegevus);//autori lisamise funktsioon
+                        break;//lahkub switchist
                     case 3:
-                        zanri_lisamine(con, res, row, tegevus);
-                        break;
+                        zanri_lisamine(con, res, row, tegevus);//žanri lisamise funktsioon
+                        break;//lahkub switchist
                     case 4:
-                        raamatule_autor(con, res, row, tegevus);
-                        break;
+                        raamatule_autor(con, res, row, tegevus);//raamatule autori lisamise funktsioon
+                        break;//lahkub switchist
                     case 5:
-                        raamatule_zanr(con, res, row, tegevus);
-                        break;
+                        raamatule_zanr(con, res, row, tegevus);//raamatule žanri lisamise funktsioon
+                        break;//lahkub switchist
                     case 6:
-                        kohaviida_lisamine(con, res, row, tegevus);
-                        break;
+                        kohaviida_lisamine(con, res, row, tegevus);//kohaviida lisamise funktsioon
+                        break;//lahkub switchist
                     case 7:
-                        koopia_lisamine(con, res, row, tegevus);
-                        break;
+                        koopia_lisamine(con, res, row, tegevus);//koopia lisamise funktsioon
+                        break;//lahkub switchist
                     case 8:
-                        uus_kasutaja(con, res, row, tegevus);
-                        break;
+                        uus_kasutaja(con, res, row, tegevus);//uue kasutaja lisamise funktsioon
+                        break;//lahkub switchist
                     case 9:
-                        uus_worker(con, res, row, tegevus);
-                        break;
+                        uus_worker(con, res, row, tegevus);//uue töötaja lisamise funktsioon
+                        break;//lahkub switchist
 
                     case 10:
-                        printf("Valisite tegevuse lahkumine.\n");
-                        valimine(con, res, row, tegevus);
-                        break;
+                        printf("Valisite tegevuse lahkumine.\n");//kui valitakse lahkumine
+                        valimine(con, res, row, tegevus);//tagasi peamenüüsse
+                        break;//lahkub switchist
                     }
-                } while (tegevus2 > 0 && tegevus2 < 11);
+                } while (tegevus2 > 0 && tegevus2 < 11);//sisestus peab olema vahemikus 1-10
 
-                break;
+                break;//lahkub switchist
 
             case 3:
                 tegevusstr = "raamatute otsimine";
                 printf("\n----- Valisite tegevuse %s -----\n", tegevusstr);
-                otsimine(con, res, row, tegevus);
-                break;
+                otsimine(con, res, row, tegevus);//raamatute otsimise funktsioon
+                break;//lahkub switchist
             case 4:
                 tegevusstr = "otsimine autori või žanri järgi";
                 printf("\n----- Valisite tegevuse %s -----\n", tegevusstr);
@@ -2491,33 +2488,33 @@ int valimine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
                 char vas[10];
                 int tegevus00;
                  do {
-                    if (fgets(vas, sizeof vas, stdin)) {
-                        char* newline = strchr(vas, '\n');
+                    if (fgets(vas, sizeof vas, stdin)) {//loeb kasutaja sisestust
+                        char* newline = strchr(vas, '\n');//otsib sisestuse läbi ning vaatab, kas selles on reavahetus 
                         if (newline) {
-                            *newline = 0;
+                            *newline = 0;//kui reavahetus oli, siis kustutab selle
                         }
                     }
-                    tegevus00 = atoi(vas);
+                    tegevus00 = atoi(vas);//muudab sisestatud vastuse numbriks
                     switch (tegevus00) {
                     case 1:
-                        autori_otsimine(con, res, row, tegevus);
-                        break;
+                        autori_otsimine(con, res, row, tegevus);//autori järgi raamatute otsimise funktsioon
+                        break;//lahkub switchist
                     case 2:
-                        zanri_otsimine(con, res, row, tegevus);
-                        break;
+                        zanri_otsimine(con, res, row, tegevus);//žanri järgi raamatute otsimise funktsioon
+                        break;//lahkub switchist
                     }
-                } while (tegevus00 > 0 && tegevus00 < 3);
-                break;
+                } while (tegevus00 > 0 && tegevus00 < 3);//sisestatud väärtus peab olema vahemikus 1-2
+                break;//lahkub switchist
             case 5:
                 tegevusstr = "raamatu laenutamine";
                 printf("\n----- Valisite tegevuse %s -----\n", tegevusstr);
-                laenutamine(con, res, row, tegevus);
-                break;
+                laenutamine(con, res, row, tegevus);//raamatute laenutamise funktsioon
+                break;//lahkub switchist
             case 6:
                 tegevusstr = "raamatu tagastamine";
                 printf("\n----- Valisite tegevuse %s -----\n", tegevusstr);
-                tagastamine(con, res, row, tegevus);
-                break;
+                tagastamine(con, res, row, tegevus);//raamatute tagastamise funktsioon
+                break;//lahkub switchist
             case 7:
                 tegevusstr = "kustutamine";
                 printf("\n----- Valisite tegevuse %s -----\n", tegevusstr);
@@ -2532,66 +2529,62 @@ int valimine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
                 printf("-> 6 Kasutaja andmed\n");
                 printf("-> 7 Töötaja andmed\n");
                 printf("-> 8 Lahkumine\n");
-                do {
-                    if (fgets(i, sizeof i, stdin)) {
-                        char* newline = strchr(i, '\n');
+                do {//tsükkel seni kaua kui kasutaja sisestab oodatud vastuse
+                    if (fgets(i, sizeof i, stdin)) {//loeb kasutaja sisestust
+                        char* newline = strchr(i, '\n');//otsib sisestuse läbi ning vaatab, kas selles on reavahetus 
                         if (newline) {
-                            *newline = 0;
+                            *newline = 0;//kui reavahetus oli, siis kustutab selle
                         }
                     }
-                    tegevus3 = atoi(i);
+                    tegevus3 = atoi(i);//muudab sisestatud vastuse numbriks
                     switch (tegevus3) {
                     case 1:
-                        raamatu_kustutamine(con, res, row, tegevus);
-                        break;
+                        raamatu_kustutamine(con, res, row, tegevus);//raamatute kustutamise funktsioon
+                        break;//lahkub switchist
                     case 2:
-                        autori_kustutamine(con, res, row, tegevus);
-                        break;
+                        autori_kustutamine(con, res, row, tegevus);//autori kustutamise funktsioon
+                        break;//lahkub switchist
                     case 3:
-                        char h[100];
-                        sprintf(h, "SELECT *FROM sanrid");
-                        if (mysql_query(con, h)) {
+                        if (mysql_query(con, "SELECT *FROM sanrid")) {//saadab serverile käsu valida andmebaasist kõik žanrite andmed
                             fprintf(stderr, "%s\n", mysql_error(con));
-                            exit(1);
+                            exit(1);//kui tekib viga, lahkub programmist 
                         }
-                        res = mysql_use_result(con);
-                        while ((row = mysql_fetch_row(res)) != NULL) {
-                            printf("%s %s\n", row[0], row[1]);
+                        res = mysql_use_result(con);//salvestab saadud tulemused
+                        while ((row = mysql_fetch_row(res)) != NULL) {//loop seni kaua kui vastuses on ridu
+                            printf("%s %s\n", row[0], row[1]);//väljastab tulemused
                         }
-                        mysql_free_result(res);
-                        zanri_kustutamine(con, res, row, tegevus);
-                        break;
+                        mysql_free_result(res);//vabastab tulemuse muutuja
+                        zanri_kustutamine(con, res, row, tegevus);//žanri kustutamise funktsioon
+                        break;//lahkub switchist
                     case 4:
-                        char g[50];
-                        sprintf(g, "SELECT *FROM kohaviit");
-                        if (mysql_query(con, g)) {
+                        if (mysql_query(con, "SELECT *FROM kohaviit")) {//saadab serverile käsu andmebaasist kohaviitade andmete valimiseks
                             fprintf(stderr, "%s\n", mysql_error(con));
-                            exit(1);
+                            exit(1);//kui tekib viga, lahkub programmist 
                         }
-                        res = mysql_use_result(con);
-                        while ((row = mysql_fetch_row(res)) != NULL) {
-                            printf("%s %s\n", row[0], row[1]);
+                        res = mysql_use_result(con);//salvestab saadud tulemused
+                        while ((row = mysql_fetch_row(res)) != NULL) {//loop seni kaua kui vastuses on ridu
+                            printf("%s %s\n", row[0], row[1]);//väljastab tulemused
                         }
-                        mysql_free_result(res);
-                        kohaviida_kustutamine(con, res, row, tegevus);
-                        break;
+                        mysql_free_result(res);//vabastab tulemuse muutuja
+                        kohaviida_kustutamine(con, res, row, tegevus);//kohaviida kustutamise funktsioon
+                        break;//lahkub switchist
                     case 5:
-                        koopia_kustutamine(con, res, row, tegevus);
-                        break;
+                        koopia_kustutamine(con, res, row, tegevus);//koopia kustutamise funktsioon
+                        break;//lahkub switchist
                     case 6:
-                        kasutaja_kustutamine(con, res, row, tegevus);
-                        break;
+                        kasutaja_kustutamine(con, res, row, tegevus);//kasutaja kustutamise funktsioon
+                        break;//lahkub switchist
                     case 7:
-                        worker_kustutamine(con, res, row, tegevus);
-                        break;
+                        worker_kustutamine(con, res, row, tegevus);//töötaja kustutamise funktsioon
+                        break;//lahkub switchist
                     case 8:
-                        printf("Valisite tegevuse lahkumine\n");
-                        exit(0);
-                        break;
+                        printf("Valisite tegevuse lahkumine\n");//kui kasutaja valib lahkumise
+                        valimine(con, res, row, tegevus);//tagasi peamenüüsse
+                        break;//lahkub switchist
                     }
-                } while (tegevus3 > 0 && tegevus3 < 9);
+                } while (tegevus3 > 0 && tegevus3 < 9);//sisestatud tegevus peab olema vahemikus 1-8
 
-                break;
+                break;//lahkub switchist
             case 8:
                 tegevusstr = "Muuda sissekannet";
                 printf("\n----- Valisite tegevuse %s -----\n", tegevusstr);
@@ -2601,49 +2594,49 @@ int valimine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
                 printf("-> 3 Žanri nime\n");
                 printf("-> 4 Kasutaja informatsiooni\n");
                 printf("-> 5 Töötaja informatsiooni\n");
-                do {
-                    if (fgets(a, sizeof a, stdin)) {
-                        char* newline = strchr(a, '\n');
+                do {//tsükkel seni kaua kui kasutaja sisestab oodatud vastuse
+                    if (fgets(a, sizeof a, stdin)) {//loeb kasutaja sisestust
+                        char* newline = strchr(a, '\n');//otsib sisestuse läbi ning vaatab, kas selles on reavahetus 
                         if (newline) {
-                            *newline = 0;
+                            *newline = 0;//kui reavahetus oli, siis kustutab selle
                         }
                     }
-                    tegevus4 = atoi(a);
+                    tegevus4 = atoi(a);//muudab sisestatud vastuse numbriks
                     switch (tegevus4) {
                     case 1:
-                        nime_muutmine(con, res, row, tegevus);
-                        break;
+                        nime_muutmine(con, res, row, tegevus);//raamatu nime muutmise funktsioon
+                        break;//lahkub switchist
                     case 2:
-                        autori_muutmine(con, res, row, tegevus);
-                        break;
+                        autori_muutmine(con, res, row, tegevus);//autori muutmise funktsioon
+                        break;//lahkub switchist
                     case 3:
-                        zanri_muutmine(con, res, row, tegevus);
-                        break;
+                        zanri_muutmine(con, res, row, tegevus);//žanri muutmise funktsioon
+                        break;//lahkub switchist
                     case 4:
-                        kasutaja_muutmine(con, res, row, tegevus);
-                        break;
+                        kasutaja_muutmine(con, res, row, tegevus);//kasutaja andmete muutmise funktsioon
+                        break;//lahkub switchist
                     case 5:
-                        worker_muutmine(con, res, row, tegevus);
-                        break;
+                        worker_muutmine(con, res, row, tegevus);//töötaja andmete muutmise funktsioon
+                        break;//lahkub switchist
 
                     }
-                } while (tegevus > 0 && tegevus < 6);
+                } while (tegevus > 0 && tegevus < 6);//sisestatud vastus peab olema vahemikus 1-5
 
-                break;
-            case 9:
+                break;//lahkub switchist
+            case 9://kui kasutaja valib programmist lahkumise
                 tegevusstr = "lahkumine programmist";
                 printf("\n----- Valisite tegevuse %s -----\n", tegevusstr);
-                mysql_close(con);
-                exit(0);
-                break;
+                mysql_close(con);//ühendus andmebaasi serveriga katkestatakse
+                exit(0);//programm lõpetab töö
+                break;//lahkub switchist
 
             }
         }
-    } while (tegevus > 0 && tegevus < 9);
+    } while (tegevus > 0 && tegevus < 9);//tegevus ei tohi olla väiksem kui 1 ja suurem kui 8
         printf("Te ei valinud tegevust! \n");
-        valimine(con, res, row, tegevus);
+        valimine(con, res, row, tegevus);//tagasi peamenüüsse
 
-    return 0;
+    return 0;//tagastab nulli
 }
 
 void raamatu_kustutamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
