@@ -2330,7 +2330,6 @@ void kasutajate_kuvamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus)
 int valimine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
     char b[20];
     char a[20];
-    char f[200];
     int tegevus4;
     printf("\nValige tegevus, mida soovite ning sisestage sellele vastav number: \n");
     printf("-> 1 Kuvamine\n");
