@@ -1246,14 +1246,14 @@ void kuvamine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
     int id = mysql_insert_id(con); //viimase INSERT käsu id
 
     printf("The last inserted row id is: %d\n", id); //prindib välja eelnevalt saadud id
-    if (mysql_query(con, "SELECT raamatud.nimi, autorid.nimi FROM raamatud JOIN raamatud_has_autorid ON raamatud.id = raamatud_has_autorid.raamatud_id JOIN autorid ON autorid.id = raamatud_has_autorid.autorid_id")) { //saadab käsu raamatute ja autorite valimiseks serverile
+    if (mysql_query(con, "SELECT raamatud.id, raamatud.nimi, autorid.nimi FROM raamatud JOIN raamatud_has_autorid ON raamatud.id = raamatud_has_autorid.raamatud_id JOIN autorid ON autorid.id = raamatud_has_autorid.autorid_id")) { //saadab käsu raamatute ja autorite valimiseks serverile
         fprintf(stderr, "%s\n", mysql_error(con));
         exit(2); //kui tekib viga, lahkub programmist 
     }
     res = mysql_use_result(con);//salvestab saadud tulemused
 
     while ((row = mysql_fetch_row(res)) != NULL) {//loop seni kaua kuni andmebaasist saadud vastel on ridu
-        printf("%s ----- %s\n", row[0], row[1]);//väljastab tulemused
+        printf("%s - %s ----- %s\n", row[0], row[1], row[2]);//väljastab tulemused
     }
     mysql_free_result(res);//vabastab tulemused
     valimine(con, res, row, tegevus); //tagasi valimise menüüsse
