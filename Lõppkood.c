@@ -2336,7 +2336,7 @@ int valimine(MYSQL* con, MYSQL_RES* res, MYSQL_ROW row, int tegevus) {
     printf("-> 2 Lisamine\n");
     printf("-> 3 Raamatute otsimine nime järgi\n");
     printf("-> 4 Raamatute otsimine autori või zanri järgi\n");
-    printf("-> 5 Raamatu\n");
+    printf("-> 5 Raamatu laenutamine\n");
     printf("-> 6 Raamatu tagastamine\n");
     printf("-> 7 Kustutamine\n");
     printf("-> 8 Muuda olemasolevat sissekannet\n");
